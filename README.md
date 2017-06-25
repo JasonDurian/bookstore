@@ -11,10 +11,10 @@ Second:
 
 ~~~
 |--data							
-	|--conf				/配置目录
-		|--config.php	/配置文件
-		|--db.php		/数据库文件
-		|--route.php	/路由文件
+  |--conf           /配置目录
+    |--config.php   /配置文件
+    |--db.php       /数据库文件
+    |--route.php    /路由文件
 ~~~
 
 使用七牛云进行项目的资源管理，所以配置文件内容为：
