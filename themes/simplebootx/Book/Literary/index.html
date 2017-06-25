@@ -1,0 +1,38 @@
+<tc_include file="Public:bookhead" />
+</head>
+<body>
+	<tc_include file="Public:booknav" />
+	<div class="mui-content">
+		<foreach name='types' item='oVo' key='k'>
+			<div class="form-tit mt20 onclick" id="&tid={$oVo['type_id']}">
+				{$oVo['name']}<span class="mui-icon mui-icon-arrowright fr"></span>
+			</div>
+			<ul class="mui-table-view">
+			<!-- flag用于控制每个子类型的书籍数量 -->
+			<php>$flag=0;</php>
+			<foreach name='books' item='vo'>
+			<if condition="$flag lt '5'">
+			  <if condition="$oVo['type_id'] eq $vo['type_id']">
+			  <php>$flag=$flag+1;</php>
+				<li class="mui-table-view-cell mui-media"><a href="{:leuu('Detail/index',array('id'=>$vo['goods_id']))}"> 
+					<img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+						<div class="mui-media-body">
+							{$vo['name']}
+							<p class="price">
+								价格：<span class="delete">{$vo['pre_price']}</span> <span class="red">{$vo['now_price']}</span>
+								[<span>
+								<php>$discount=round(($vo['now_price']/$vo['pre_price']*10),1);echo $discount;</php>
+								</span>折]
+							</p>
+						</div>
+				</a></li>
+			  </if>
+			</if>
+			</foreach>
+			</ul>
+		</foreach>
+	</div>
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+</body>
+</html>

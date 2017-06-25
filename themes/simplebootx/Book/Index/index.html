@@ -1,0 +1,80 @@
+<tc_include file="Public:bookhead" />
+</head>
+<div class="mui-slider">
+  <div class="mui-slider-group mui-slider-loop">
+    <!--支持循环，需要重复图片节点-->
+    <div class="mui-slider-item mui-slider-item-duplicate"><a href="{$slides[$sliCount]['url']}"><img src="{:sp_get_asset_upload_path($slides[$sliCount]['image'])}" /></a></div>
+    <foreach name='slides' item='vo'>
+    	<div class="mui-slider-item"><a href="{$vo['url']}"><img src="{:sp_get_asset_upload_path($vo['image'])}" /></a></div>
+    </foreach>
+    <!--支持循环，需要重复图片节点-->
+    <div class="mui-slider-item mui-slider-item-duplicate"><a href="{$slides[0]['url']}"><img src="{:sp_get_asset_upload_path($slides[0]['image'])}" /></a></div>
+  </div>
+  <div class="mui-slider-indicator">
+    <foreach name='slides' item='vo' key="k">
+      <div class="mui-indicator <if condition="$k eq 0">mui-active</if>"></div>  
+    </foreach> 
+  </div>  
+</div>
+<body>
+	<tc_include file="Public:booknav" />
+	<div class="mui-content">
+	<foreach name='types' item='oVo'>
+		<div class="form-tit mt20 onclick" id="&tid={$oVo['type_id']}">
+			{$oVo['name']}<span class="mui-icon mui-icon-arrowright fr"></span>
+		</div>
+		<div class="booklist-index">
+			<div class="swiper-container swiper">
+				<div class="swiper-wrapper">
+				  <!-- flag用于控制每个子类型的书籍数量 -->
+				  <php>$flag=0;</php>
+				  <foreach name='books' item='vo'>
+				  <if condition="$flag lt '8'">
+				      <if condition="$oVo['type_id'] eq $vo['type_id']">
+    				  	  <php>$flag=$flag+1;</php>
+        					<div class="swiper-slide">
+        						  <a href="{:leuu('Detail/index',array('id'=>$vo['goods_id']))}">
+            							<div class="img">
+            								  <img src="{:sp_get_asset_upload_path($vo['cover'])}" />
+            							</div>
+            							<p>{$vo['name']}</p> <span>￥{$vo['now_price']}</span>
+        						  </a>
+        					</div>
+    					</if>
+				  </if>
+				</foreach>
+				</div>
+			</div>
+		</div>
+	</foreach>
+
+		<!--标签图片-->
+		<div class="mui-slider mt20">
+			<div class="mui-slider-group mui-slider-loop"></div>
+		</div>
+		<!--标签图片-->
+	</div>
+	
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script src="__TMPL__Public/assets/js/swiperSlide/swiper.min.js"></script>
+<script>
+	var swiper = new Swiper('.swiper-container', {
+		autoplay : 5000,
+		loop : false,
+		pagination : '.swiper-pagination',
+		slidesPerView : 3,
+		paginationClickable : true,
+		spaceBetween : 0
+	});
+
+	//获得slider插件对象
+	var gallery = mui('.mui-slider');
+	gallery.slider({
+		interval : 5000
+	//自动轮播周期，若为0则不自动播放，默认为0；
+	});
+
+</script>
+</body>
+</html>

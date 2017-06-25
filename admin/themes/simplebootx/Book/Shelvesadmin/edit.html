@@ -1,0 +1,351 @@
+<admintpl file="header" />
+<style type="text/css">
+.pic-list li {
+	margin-bottom: 5px;
+}
+</style>
+<script type="text/html" id="photos-item-wrapper">
+	<li id="savedimage{id}">
+		<input id="photo-{id}" type="hidden" name="photos_url[]" value="{filepath}"> 
+		<input id="photo-{id}-name" type="text" name="photos_alt[]" value="{name}" style="width: 160px;" title="图片名称">
+		<img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;" onclick="parent.image_preview_dialog(this.src);">
+		<a href="javascript:upload_one_image('图片上传','#photo-{id}');">替换</a>
+		<a href="javascript:$('#savedimage{id}').remove();">移除</a>
+	</li>
+</script>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Shelvesadmin/index')}">{:L('BOOK_SHELVESADMIN_INDEX')}</a></li>
+			<li><a href="{:U('Shelvesadmin/add',array('term'=>empty($term['term_id'])?'':$term['term_id']))}" target="_self">{:L('BOOK_SHELVESADMIN_ADD')}</a></li>
+			<li class="active"><a href="#">{:L('BOOK_SHELVESADMIN_EDIT')}</a></li>
+		</ul>
+		<form action="{:U('Shelvesadmin/edit_book')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<div class="row-fluid">
+				<div class="span9">
+					<table class="table table-bordered">
+						<tr>
+							<th width="80">分类</th>
+							<td>
+								<select multiple="multiple" style="max-height: 100px;"name="term[]">{$taxonomys}</select>
+								<div>windows：按住 Ctrl 按钮来选择多个选项,Mac：按住 command 按钮来选择多个选项</div>
+							</td>
+						</tr>
+						<tr>
+							<th>标题</th>
+							<td>
+								<input type="hidden" name="book[goods_id]" value="{$book['goods_id']}">
+								<input type="text" style="width: 400px;" name="book[name]" required value="{$book['name']}" placeholder="请输入标题"/>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>ISBN</th>
+							<td>
+								<input type="text" style="width: 400px;" name="book[goods_sn]" required value="{$book['goods_sn']}" placeholder="请输入ISBN"/>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>作者/出版社</th>
+							<td>
+								<input type="text" style="width:200px;" name="params[author]" id="author" required value="{$params['author']}" placeholder="请输入作者"/>
+								<input type="text" style="width:200px;" name="params[press]" id="press" required value="{$params['press']}" placeholder="请输入出版社"/>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>现价/原价</th>
+							<td>
+								<input type="text" style="width:200px;" name="book[now_price]" id="now_price" required value="{$book['now_price']}" placeholder="请输入现价"/>
+								<input type="text" style="width:200px;" name="book[pre_price]" id="pre_price" required value="{$book['pre_price']}" placeholder="请输入原价"/>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>库存</th>
+							<td>
+								<input type="text" style="width:400px;" name="book[inventory]" id="inventory" required value="{$book['inventory']}" placeholder="请输入库存"/>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>内容</th>
+							<td>
+								<script type="text/plain" id="content" name="book[detail]">{$book['detail']}</script>
+							</td>
+						</tr>
+						<tr>
+							<th>相册图集</th>
+							<td>
+								<ul id="photos" class="pic-list unstyled">
+									<notempty name="smeta['photo']">
+										<foreach name="smeta['photo']" item="vo">
+										<php>$img_url=sp_get_image_preview_url($vo['url']);</php>
+										<li id="savedimage{$key}">
+											<input id="photo-{$key}" type="hidden" name="photos_url[]" value="{$img_url}"> 
+											<input id="photo-{$key}-name" type="text" name="photos_alt[]" value="{$vo.alt}" style="width: 200px;" title="图片名称">
+											<img id="photo-{$key}-preview" src="{:sp_get_image_preview_url($vo['url'])}" style="height:36px;width: 36px;" onclick="parent.image_preview_dialog(this.src);">
+											<a href="javascript:upload_one_image('图片上传','#photo-{$key}');">替换</a>
+											<a href="javascript:$('#savedimage{$key}').remove();">移除</a>
+										</li>
+										</foreach>
+									</notempty>
+								</ul>
+								<a href="javascript:upload_multi_image('图片上传','#photos','photos-item-wrapper');" class="btn btn-small">选择图片</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="span3">
+					<table class="table table-bordered">
+						<tr>
+							<td><b>缩略图</b></td>
+						</tr>
+						<tr>
+							<td>
+								<div style="text-align: center;">
+									<input type="hidden" name="book[cover]" id="thumb" value="{$book['cover']|default=''}">
+									<a href="javascript:upload_one_image('图片上传','#thumb');">
+										<if condition="empty($book['cover'])">
+											<img src="__TMPL__Public/assets/images/default-thumbnail.png" id="thumb-preview" width="135" style="cursor: hand"/>
+										<else />
+											<img src="{:sp_get_image_preview_url($book['cover'])}" id="thumb-preview" width="135" style="cursor: hand"/>
+										</if>
+									</a>
+									<input type="button" class="btn btn-small" onclick="$('#thumb-preview').attr('src','__TMPL__Public/assets/images/default-thumbnail.png');$('#thumb').val('');return false;" value="取消图片">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>发布时间</th>
+						</tr>
+						<tr>
+							<td><input type="text" name="book[create_time]" value="{$book['create_time']|date='Y-m-d H:i:s', ###}" class="js-datetime" style="width: 160px;"></td>
+						</tr>
+						<tr>
+							<th>评论</th>
+						</tr>
+						<tr>
+							<td><label style="width: 88px"><a href="javascript:open_iframe_dialog('{:U('comment/commentadmin/index',array('book_id'=>$book['goods_id']))}','评论列表')">查看评论</a></label>
+							</td>
+						</tr>
+						<tr>
+							<th>状态</th>
+						</tr>
+						<tr>
+							<td>
+								<php>
+									$status_yes=$book['is_new']==1?"checked":"";
+									$status_no=$book['is_new']==0?"checked":"";
+									$istop_yes=$book['is_hot']==1?"checked":"";
+									$istop_no=$book['is_hot']==0?"checked":"";
+									$recommended_yes=$book['is_recommend']==1?"checked":"";
+									$recommended_no=$book['is_recommend']==0?"checked":""; 
+								</php>
+								<label class="radio"><input type="radio" name="book[is_new]" value="1" {$status_yes}>新品书籍</label>
+								<label class="radio"><input type="radio" name="book[is_new]" value="0" {$status_no}>非新品</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="radio"><input type="radio" name="book[is_hot]" value="1" {$istop_yes}>热门书籍</label>
+								<label class="radio"><input type="radio" name="book[is_hot]" value="0" {$istop_no}>非热门</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="radio"><input type="radio" name="book[is_recommend]" value="1" {$recommended_yes}>推荐</label>
+								<label class="radio"><input type="radio" name="book[is_recommend]" value="0" {$recommended_no}>未推荐</label>
+							</td>
+						</tr>
+						<tr>
+							<th>书籍模板</th>
+						</tr>
+						<tr>
+							<td>
+								<php>
+									$tpl_list=sp_admin_get_tpl_file_list();
+									unset($tpl_list['page']);
+								</php>
+								<select style="min-width: 190px;" name="smeta[template]">
+									<option value="">请选择模板</option>
+									<foreach name="tpl_list" item="vo">
+										<php>$template_selected=$smeta['template']==$vo?"selected":"";</php>
+										<option value="{$vo}"{$template_selected}>{$vo}{:C("TMPL_TEMPLATE_SUFFIX")}</option>
+									</foreach>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit">提交</button>
+				<a class="btn" href="javascript:history.back(-1);">返回</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		//编辑器路径定义
+		var editorURL = GV.WEB_ROOT;
+	</script>
+	<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.all.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			
+			//setInterval(function(){public_lock_renewal();}, 10000);
+			$(".js-ajax-close-btn").on('click', function(e) {
+				e.preventDefault();
+				Wind.use("artDialog", function() {
+					art.dialog({
+						id : "question",
+						icon : "question",
+						fixed : true,
+						lock : true,
+						background : "#CCCCCC",
+						opacity : 0,
+						content : "您确定需要关闭当前页面嘛？",
+						ok : function() {
+							setCookie("refersh_time", 1);
+							window.close();
+							return true;
+						}
+					});
+				});
+			});
+			/////---------------------
+			Wind.use('validate', 'ajaxForm', 'artDialog', function() {
+				//javascript
+
+				//编辑器
+				editorcontent = new baidu.editor.ui.Editor();
+				editorcontent.render('content');
+				try {
+					editorcontent.sync();
+				} catch (err) {
+				}
+				//增加编辑器验证规则
+				jQuery.validator.addMethod('editorcontent', function() {
+					try {
+						editorcontent.sync();
+					} catch (err) {
+					}
+					;
+					return editorcontent.hasContents();
+				});
+				var form = $('form.js-ajax-forms');
+				//ie处理placeholder提交问题
+				if ($.browser && $.browser.msie) {
+					form.find('[placeholder]').each(function() {
+						var input = $(this);
+						if (input.val() == input.attr('placeholder')) {
+							input.val('');
+						}
+					});
+				}
+				//表单验证开始
+				form.validate({
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//是否在敲击键盘时验证
+					onkeyup : false,
+					//当鼠标掉级时验证
+					onclick : false,
+					//验证错误
+					showErrors : function(errorMap, errorArr) {
+						//errorMap {'name':'错误信息'}
+						//errorArr [{'message':'错误信息',element:({})}]
+						try {
+							$(errorArr[0].element).focus();
+							art.dialog({
+								id : 'error',
+								icon : 'error',
+								lock : true,
+								fixed : true,
+								background : "#CCCCCC",
+								opacity : 0,
+								content : errorArr[0].message,
+								cancelVal : '确定',
+								cancel : function() {
+									$(errorArr[0].element).focus();
+								}
+							});
+						} catch (err) {
+						}
+					},
+					//验证规则
+					rules : {
+						'book[name]' : {
+							required : 1
+						},
+						'book[detail]' : {
+							editorcontent : true
+						}
+					},
+					//验证未通过提示消息
+					messages : {
+						'book[name]' : {
+							required : '请输入标题'
+						},
+						'book[detail]' : {
+							editorcontent : '内容不能为空'
+						}
+					},
+					//给未通过验证的元素加效果,闪烁等
+					highlight : false,
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//验证通过，提交表单
+					submitHandler : function(forms) {
+						$(forms).ajaxSubmit({
+							url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+							dataType : 'json',
+							beforeSubmit : function(arr, $form, options) {
+
+							},
+							success : function(data, statusText, xhr, $form) {
+								if (data.status) {
+									setCookie("refersh_time", 1);
+									//添加成功
+									Wind.use("artDialog", function() {
+										art.dialog({
+											id : "succeed",
+											icon : "succeed",
+											fixed : true,
+											lock : true,
+											background : "#CCCCCC",
+											opacity : 0,
+											content : data.info,
+											button : [ {
+												name : '继续编辑？',
+												callback : function() {
+													//reloadPage(window);
+													return true;
+												},
+												focus : true
+											}, {
+												name : '返回列表页',
+												callback : function() {
+													location = "{:U('Shelvesadmin/index')}";
+													return true;
+												}
+											} ]
+										});
+									});
+								} else {
+									artdialog_alert(data.info);
+								}
+							}
+						});
+					}
+				});
+			});
+			////-------------------------
+		});
+	</script>
+</body>
+</html>

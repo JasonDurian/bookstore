@@ -1,0 +1,54 @@
+<tc_include file="Public:bookorder" />
+<script>
+    var moredata=1;
+    var page_num=1;
+    var ajax_url="{:leuu('Member/orderLimit')}";
+    $(window).scroll(function(){
+        var total_height = document.body.scrollHeight;
+        var scrollTop = document.body.scrollTop;
+        var window_height = window.innerHeight;
+        if(total_height == (scrollTop +window_height) && moredata==1){
+            page_num++;
+            $.post(ajax_url,{page:page_num},
+             function(data){
+                if(data.result1!=''){
+                    $("#remind").html('正在努力加载…');
+                    $("#remind").show();
+                    var ordersList=eval(data.result1);
+                    var booksList=eval(data.result2);
+                    var htmlstr='';
+                    $.each(ordersList,function(k,v){                    //k为1~8循环
+                    	htmlstr+='<ul class="mui-table-view">'+
+                    		'<a href="{:leuu('Shopping/orderDetail')}&orderID='+v.order_id+'">'+
+                    		'<li class="mui-table-view-cell"><hr />'+
+                    		'单号：<span class="orderSN">'+v.order_sn+'</span> <span class="orderStatus red fr">'+v.statusTip1+'</span></li>';
+                    	$.each(booksList[k],function(kk,vo){
+                    	    var cover = (vo.cover.indexOf('http') === 0) || (vo.cover.indexOf('/') === 0) ? vo.cover : ('{:sp_get_asset_upload_path()}' + vo.cover);
+                    		htmlstr+='<li class="mui-table-view-cell">'+
+                    		'<img class="mui-media-object mui-pull-left" src="'+cover+'">'+
+                    		'<div class="mui-media-body">'+vo.name+
+                    		'<p class="price">价格：<span class="now_price">￥'+vo.now_price+'</span><br />数量：x<span class="goodsNUM">'+vo.num+'</span></p>'+
+                    		'</div></li>';
+                    	});
+                    	htmlstr+='<li class="mui-table-view-cell">'+
+                    		'<span class="fr">总计：￥'+v.total_price+'</span></li>'+
+                    		'</a><li class="mui-table-view-cell">' + v.statusTip2 + v.statusTip3 + '</li></ul>';
+                    });
+                    // 为了测试，延迟1秒加载
+                    setTimeout(function(){
+                        $(".lists").append(htmlstr);
+                    },1000);
+
+                }else{
+                    $("#remind").html('数据已经全部加载了哦！ ^_^');
+                    $("#remind").show();
+                    moredata=0;
+                    return;
+                }
+            });
+        }
+    });
+    
+</script>
+</body>
+</html>

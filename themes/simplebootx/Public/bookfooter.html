@@ -1,0 +1,46 @@
+	<!-- 返回顶部 -->
+	<div id="gotop" class="gotop">
+		<a href="javascript:this.blur();" class="w_top"><img
+			src="{:sp_get_asset_upload_path('img/top.png')}" width="30" height="30"></a>
+	</div>
+	<!-- 返回顶部 -->
+
+	<div id="weixin-menu">
+		<ul>
+			<li>
+				<div class="menu_li" onclick="location.href='{:leuu('Index/index')}';">
+					<img src="{:sp_get_asset_upload_path('img/bar-icon-01.png')}" height="20px"><br />首页
+				</div> <span style="bottom: -240px;"><img src="{:sp_get_asset_upload_path('img/bar-icon-01cover.png')}" /></span>
+			</li>
+			<li>
+				<div class="menu_li" onclick="location.href='{:leuu('Shopping/index')}';">
+					<em class="pro_count"></em> <img src="{:sp_get_asset_upload_path('img/bar-icon-02.png')}" height="20px"><br />购物车
+				</div> <span style="bottom: -240px;"><img src="{:sp_get_asset_upload_path('img/bar-icon-02cover.png')}" /></span> 
+				<!--			<span style="bottom: -240px;">-->
+				<!--				<img src="img/navbg2.png" width="100%">--> <!--				<div>-->
+				<!--                    <a href="-->
+				<!--">我的购物车</a>--> <!--                    <a href="-->
+				<!--">我的借阅车</a>--> <!--                </div>--> <!--			</span>-->
+			</li>
+			<li>
+				<div class="menu_li">
+					<img src="{:sp_get_asset_upload_path('img/bar-icon-03.png')}" height="20px"><br />订单中心
+				</div> 
+				<span style="bottom: -240px;"> 
+				  <img src="{:sp_get_asset_upload_path('img/navbg4.png')}" width="100%" />
+					<div>
+						<a href="{:leuu('Member/index')}">个人中心</a>
+						<a href="{:leuu('Member/order')}">我的订单</a>
+						<!--                    <a href="-->
+						<!--">我的借阅</a>-->
+						<a href="{:leuu('Member/favorite')}">我的收藏</a>
+						<a href="{:leuu('Member/borrow')}">我的借阅</a>
+						<!--                    <a href="-->
+						<!--">我的优惠券</a>-->
+						<!--                    <a href="-->
+						<!--">我的积分</a>-->
+					</div>
+				</span>
+			</li>
+		</ul>
+	</div>

@@ -1,0 +1,62 @@
+<tc_include file="Public:bookhead" />
+<link href="__TMPL__Public/assets/css/swiperSlide/mui.picker.css" rel="stylesheet" />
+<link href="__TMPL__Public/assets/css/swiperSlide/mui.poppicker.css" rel="stylesheet" />
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+   <h2>添加收货地址</h2>
+</header>
+<div class="mui-content bgw">
+   <form class="mui-input-group" action="{:leuu('Member/saveAddress')}" method="post" autocomplete="on">
+	    <div class="mui-input-row">
+	        <label for="my-contact">收货人</label>
+	        <input type="text" id="my-contact" name="contact" placeholder="请输入收货人姓名" autofocus/>
+	    </div>
+	    <div class="mui-input-row">
+	        <label for="my-mobile">联系电话</label>
+	        <input type="number" class="mui-input-clear" id="my-mobile" name="mobile" placeholder="请输入联系电话" />
+	    </div>
+	    <div class="mui-input-row">
+	        <label>所在地区</label>
+	        <input id='showCityPicker' type="text" name="region" placeholder="选择所在地区..." onfocus=this.blur() autocomplete="off"/>
+	    </div>
+	    <div class="mui-input-row">
+	        <label for="my-address">详细地址</label>
+	        <textarea id="my-address" name="address" rows="3" cols="20"></textarea>
+	    </div>
+	    
+	    <div class="mui-input-row mui-checkbox mui-left">
+			<label for="my-default">设为默认</label>
+			<input type="checkbox" id="my-default" name="is_default">
+		</div> 
+	    
+	    <div class="mui-button-row">
+	        <button id="saveAddress" class="mui-btn red" >确认并保存</button>
+	    </div>
+   </form>
+</div>
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script src="__TMPL__Public/assets/js/swiperSlide/mui.picker.js"></script>
+<script src="__TMPL__Public/assets/js/swiperSlide/mui.poppicker.js"></script>
+<script src="__TMPL__Public/assets/js/swiperSlide/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+<script>
+(function($, doc) {
+	var cityPicker = new $.PopPicker({
+		layer: 3
+	});
+	cityPicker.setData(cityData3);
+	var showCityPickerText = doc.getElementById('showCityPicker');
+	showCityPickerText.addEventListener('tap', function(event) {
+		cityPicker.show(function(items) {
+			var str = (items[0] || {}).text + "-" + (items[1] || {}).text + "-" + (items[2] || {}).text;
+			showCityPickerText.value = str;
+			//返回 false 可以阻止选择框的关闭
+			//return false;
+		});
+	}, false);
+})(mui, document);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script src="__TMPL__Public/assets/js/swiperSlide/mz.js"></script>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "__WEB_ROOT__/",
+        JS_ROOT: "public/js/"
+    };
+    
+    window.onload = function(){
+        $('#weixin-menu ul li').each(function(j){
+            $('#weixin-menu ul li').eq(j).removeClass("on");
+            $('#weixin-menu ul li span').eq(j).animate({bottom:-$('#weixin-menu ul li span').eq(j).height()},100);
+        });
+    }
+    
+    $('#weixin-menu ul li').each(function(i){
+        $(this).click(function(){
+            if($(this).attr("class")!="on"){
+                $('#weixin-menu ul .on span').animate({bottom:-$('#weixin-menu ul .on span').height()},200);
+                $('#weixin-menu ul .on').removeClass("on");
+                $(this).addClass("on");
+                $('#weixin-menu ul li span').eq(i).animate({bottom:40},200);
+                $('.footer_front').show();
+            }else{
+                $('#weixin-menu ul li span').eq(i).animate({bottom:-$('#weixin-menu ul li span').eq(i).height()},200);
+                $(this).removeClass("on");
+                $('.footer_front').hide();
+            }
+        });
+    });
+    
+    $('.footer_front').click(function(){
+        $('#weixin-menu ul .on span').animate({bottom:-$('#weixin-menu ul .on span').height()},200);
+        $('#weixin-menu ul .on').removeClass("on");
+        $(this).hide();
+    });
+    
+</script>
+<script src="__TMPL__Public/assets/js/swiperSlide/mui.mini.js"></script>
+<script charset="utf-8">
+    mui.init({
+        pullRefresh: {
+            container: '#pullrefresh',
+            down: {
+                callback: pulldownRefresh
+            },
+            /*up: {
+                contentrefresh: '正在加载...',
+                callback: pullupRefresh
+            }*/
+        }
+    });
+    /**
+     * 下拉刷新具体业务实现
+     */
+    function pulldownRefresh() {
+//      setTimeout(function() {
+            window.location.reload();
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+//      }, 1500);
+    }
+
+    $(".onclick").click(
+        function() {
+            var url = "{:leuu('Category/category')}" + $(this).attr('id');
+            document.location.href = url;
+        });
+    
+    /*$('nav a').bind('click', function(){        //不适用于多个页面引用同一个模板的情况
+        $('nav a.mui-active').removeClass('mui-active'); 
+        $(this).addClass('mui-active'); 
+    });*/
+   
+    $('nav a').each(function () {
+        if(this.href == document.location.href || document.location.href.search(this.href) >= 0) {
+            $(this).addClass('mui-active');
+            if($(this).parent().hasClass('order-nav')) $(this).addClass('order_bottom');
+        }
+    });
+    
+ 	// 监听tap事件，解决 a标签 不能跳转页面问题,但是a作为btn的要另作处理
+    mui('body').on('tap','a:not(.mui-btn)',function() {
+   		document.location.href=this.href;
+    });
+    
+</script>

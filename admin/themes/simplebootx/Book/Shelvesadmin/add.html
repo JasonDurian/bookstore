@@ -1,0 +1,379 @@
+<admintpl file="header" />
+<style type="text/css">
+.pic-list li {
+	margin-bottom: 5px;
+}
+</style>
+<script type="text/html" id="photos-item-wrapper">
+	<li id="savedimage{id}">
+		<input id="photo-{id}" type="hidden" name="photos_url[]" value="{filepath}"> 
+		<input id="photo-{id}-name" type="text" name="photos_alt[]" value="{name}" style="width: 160px;" title="图片名称">
+		<img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;" onclick="parent.image_preview_dialog(this.src);">
+		<a href="javascript:upload_one_image('图片上传','#photo-{id}');">替换</a>
+		<a href="javascript:$('#savedimage{id}').remove();">移除</a>
+	</li>
+</script>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Shelvesadmin/index')}">{:L('BOOK_SHELVESADMIN_INDEX')}</a></li>
+			<li class="active"><a href="{:U('Shelvesadmin/add',array('term'=>empty($term['term_id'])?'':$term['term_id']))}" target="_self">{:L('BOOK_SHELVESADMIN_ADD')}</a></li>
+		</ul>
+		<form action="{:U('Shelvesadmin/add_book')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<div class="row-fluid">
+				<div class="span9">
+					<table class="table table-bordered">
+						<tr>
+							<th width="80">分类</th>
+							<td>
+								<select multiple="multiple" style="max-height: 100px;" name="term[]">{$taxonomys}</select>
+								<div>请选择一个分类</div>
+							</td>
+						</tr>
+						<tr>
+							<th>标题</th>
+							<td>
+								<input type="text" style="width:400px;" name="book[name]" id="name" required value="" placeholder="请输入标题"/>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>ISBN</th>
+							<td>
+								<input type="text" style="width:400px;" name="book[goods_sn]" id="goods_sn" required value="" placeholder="请输入ISBN"/>
+								<span class="form-required">*</span>
+								<input class="btn" type="button" id="isbnQuery" value="Go" />
+							</td>
+						</tr>
+						<tr>
+							<th>作者/出版社</th>
+							<td>
+								<input type="text" style="width:200px;" name="params[author]" id="author" required value="" placeholder="请输入作者"/>
+								<input type="text" style="width:200px;" name="params[press]" id="press" required value="" placeholder="请输入出版社"/>
+								<span class="form-required">*</span>
+								<input class="btn" type="button" id="addParams" value="+" />
+							</td>
+						</tr>
+						<tr id="otherParams" style="display: none">
+							<th><input type="text" style="width:65px;" id="add_name" placeholder="类目名"/></th>
+							<td><input type="text" style="width:400px;" name="params[add_content]" id="add_content" placeholder="请输入对应的内容"/></td>
+						</tr>
+						<tr>
+							<th>现价/原价</th>
+							<td>
+								<input type="text" style="width:200px;" name="book[now_price]" id="now_price" required value="" placeholder="请输入现价"/>
+								<input type="text" style="width:200px;" name="book[pre_price]" id="pre_price" required value="" placeholder="请输入原价"/>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>库存</th>
+							<td>
+								<input type="text" style="width:400px;" name="book[inventory]" id="inventory" required value="" placeholder="请输入库存"/>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>内容</th>
+							<td>
+								<script type="text/plain" id="content" name="book[detail]">
+									<img src="{:sp_get_asset_upload_path('uploadfiles/Editor.jpg')}" alt="">
+									<p id="editor"></p>
+									<img src="{:sp_get_asset_upload_path('uploadfiles/Content.jpg')}" alt="">
+									<p id="summary"></p>
+									<img src="{:sp_get_asset_upload_path('uploadfiles/Author.jpg')}" alt="">
+									<p></p>
+									<img src="{:sp_get_asset_upload_path('uploadfiles/Directory.jpg')}" alt="">
+									<p></p>
+									<img src="{:sp_get_asset_upload_path('uploadfiles/Abstract.jpg')}" alt="">
+									<p></p>
+									<img src="{:sp_get_asset_upload_path('uploadfiles/Media.jpg')}" alt="">
+									<p id="media"></p> 
+								</script>
+							</td>
+						</tr>
+						<tr>
+							<th>相册图集</th>
+							<td>
+								<ul id="photos" class="pic-list unstyled"></ul>
+								<a href="javascript:upload_multi_image('图片上传','#photos','photos-item-wrapper');" class="btn btn-small">选择图片</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="span3">
+					<table class="table table-bordered">
+						<tr>
+							<th><b>缩略图</b></th>
+						</tr>
+						<tr>
+							<td>
+								<div style="text-align: center;">
+									<input type="hidden" name="book[cover]" id="thumb" value="">
+									<a id="uploadImage" href="javascript:upload_one_image('图片上传','#thumb');">
+										<img src="__TMPL__Public/assets/images/default-thumbnail.png" id="thumb-preview" width="135" style="cursor: hand" />
+									</a>
+									<input type="button" class="btn btn-small" onclick="$('#thumb-preview').attr('src','__TMPL__Public/assets/images/default-thumbnail.png');$('#thumb').val('');return false;" value="取消图片">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th><b>发布时间</b></th>
+						</tr>
+						<tr>
+							<td><input type="text" name="book[create_time]" value="{:date('Y-m-d H:i:s',time())}" class="js-datetime" style="width: 160px;"></td>
+						</tr>
+						<tr>
+							<th><b>状态</b></th>
+						</tr>
+						<tr>
+							<td>
+								<label class="radio"><input type="radio" name="book[is_new]" value="1" checked>新品书籍</label>
+								<label class="radio"><input type="radio" name="book[is_new]" value="0">非新品</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="radio"><input type="radio" name="book[is_hot]" value="1">热门书籍</label>
+								<label class="radio"><input type="radio" name="book[is_hot]" value="0" checked>非热门</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="radio"><input type="radio" name="book[is_recommended]" value="1">推荐</label>
+								<label class="radio"><input type="radio" name="book[is_recommended]" value="0" checked>未推荐</label>
+							</td>
+						</tr>
+						<tr>
+							<th>书籍模板</th>
+						</tr>
+						<tr>
+							<td>
+								<php>
+									$tpl_list=sp_admin_get_tpl_file_list();
+									unset($tpl_list['page']);
+								</php>
+								<select style="min-width: 190px;" name="smeta[template]">
+									<option value="">请选择模板</option>
+									<foreach name="tpl_list" item="vo">
+										<option value="{$vo}">{$vo}{:C("TMPL_TEMPLATE_SUFFIX")}</option>
+									</foreach>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit">提交</button>
+				<a class="btn" href="javascript:history.back(-1);">返回</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		//编辑器路径定义
+		var editorURL = GV.WEB_ROOT;
+	</script>
+	<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.all.min.js"></script>
+	<script type="text/javascript">
+		//编辑器
+		editorcontent = new baidu.editor.ui.Editor();
+		editorcontent.render('content');
+	
+		$(function() {
+			$(".js-ajax-close-btn").on('click', function(e) {
+				e.preventDefault();
+				Wind.use("artDialog", function() {
+					art.dialog({
+						id : "question",
+						icon : "question",
+						fixed : true,
+						lock : true,
+						background : "#CCCCCC",
+						opacity : 0,
+						content : "您确定需要关闭当前页面嘛？",
+						ok : function() {
+							setCookie("refersh_time", 1);
+							window.close();
+							return true;
+						}
+					});
+				});
+			});
+			/////---------------------
+			Wind.use('validate', 'ajaxForm', 'artDialog', function() {
+				//javascript
+
+				try {
+					editorcontent.sync();
+				} catch (err) {
+				}
+				//增加编辑器验证规则
+				jQuery.validator.addMethod('editorcontent', function() {
+					try {
+						editorcontent.sync();
+					} catch (err) {
+					}
+					return editorcontent.hasContents();
+				});
+				var form = $('form.js-ajax-forms');
+				//ie处理placeholder提交问题
+				if ($.browser && $.browser.msie) {
+					form.find('[placeholder]').each(function() {
+						var input = $(this);
+						if (input.val() == input.attr('placeholder')) {
+							input.val('');
+						}
+					});
+				}
+
+				var formloading = false;
+				//表单验证开始
+				form.validate({
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//是否在敲击键盘时验证
+					onkeyup : false,
+					//当鼠标掉级时验证
+					onclick : false,
+					//验证错误
+					showErrors : function(errorMap, errorArr) {
+						//errorMap {'name':'错误信息'}
+						//errorArr [{'message':'错误信息',element:({})}]
+						try {
+							$(errorArr[0].element).focus();
+							art.dialog({
+								id : 'error',
+								icon : 'error',
+								lock : true,
+								fixed : true,
+								background : "#CCCCCC",
+								opacity : 0,
+								content : errorArr[0].message,
+								cancelVal : '确定',
+								cancel : function() {
+									$(errorArr[0].element).focus();
+								}
+							});
+						} catch (err) {
+						}
+					},
+					//验证规则
+					rules : {
+						'book[name]' : {
+							required : 1
+						},
+						'book[detail]' : {
+							editorcontent : true
+						}
+					},
+					//验证未通过提示消息
+					messages : {
+						'book[name]' : {
+							required : '请输入标题'
+						},
+						'book[detail]' : {
+							editorcontent : '内容不能为空'
+						}
+					},
+					//给未通过验证的元素加效果,闪烁等
+					highlight : false,
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//验证通过，提交表单
+					submitHandler : function(forms) {
+						if (formloading)
+							return;
+						$(forms).ajaxSubmit({
+							url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+							dataType : 'json',
+							beforeSubmit : function(arr, $form, options) {
+								formloading = true;
+							},
+							success : function(data, statusText, xhr, $form) {
+								formloading = false;
+								if (data.status) {
+									setCookie("refersh_time", 1);
+									//添加成功
+									Wind.use("artDialog", function() {
+										art.dialog({
+											id : "succeed",
+											icon : "succeed",
+											fixed : true,
+											lock : true,
+											background : "#CCCCCC",
+											opacity : 0,
+											content : data.info,
+											button : [ {
+												name : '继续添加？',
+												callback : function() {
+													reloadPage(window);
+													return true;
+												},
+												focus : true
+											}, {
+												name : '返回列表页',
+												callback : function() {
+													location = "{:U('Shelvesadmin/index')}";
+													return true;
+												}
+											} ]
+										});
+									});
+								} else {
+									artdialog_alert(data.info);
+								}
+							}
+						});
+					}
+				});
+			});
+			////-------------------------
+		});
+		
+		
+		//var ue = UE.getEditor('content');
+		$('#isbnQuery').click(function() {
+			var isbn = $('#goods_sn').val();
+			$.ajax({
+				type: "post",
+				url: "{:leuu('Shelvesadmin/amazonISBN')}",
+				data:{isbn:isbn},
+				dataType: "json",
+				beforeSend: function() {
+					$('#isbnQuery').val('. . .');
+					$('#isbnQuery').attr('disabled',true);
+				},
+				success: function(data) {
+					$('#isbnQuery').val('Go');
+					$('#isbnQuery').attr('disabled',false);
+					if (data.status) {
+						$('#name').val(data.title);
+						$('#author').val(data.author);
+						$('#press').val(data.press);
+						//$('#pre_price').val(data.price);
+						$('#uploadImage').attr('href','javascript:upload_one_image("图片上传","#thumb","",false,"'+ data.imgUrl +'");');
+						editorcontent.setContent(data.contents);
+					}else {
+						alert(data.info);
+					}
+				}
+			});
+		});
+		
+		//var flag = 1;
+		$('#addParams').click(function() {
+			$('#otherParams').toggle();
+			/*if(flag == 1) {
+				flag++;
+				var htmlStr = '<th><input type="text" style="width:65px;" id="add_name" placeholder="类目名"/></th>'+
+				   '<td><input type="text" style="width:400px;" name="params[add_content]" id="add_content" placeholder="请输入对应的内容"/></td>';
+	    		$('#otherParams').append(htmlStr);
+			}*/
+		});
+	</script>
+</body>
+</html>

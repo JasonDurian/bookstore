@@ -1,0 +1,147 @@
+<tc_include file="Public:bookhead" />
+<style>
+</style>
+</head>
+<body class="bgw">
+    <div id="spinBody"></div>
+    <div id="previewSpin"></div>
+    <div id="previewText" class="loading-text white" style="display: none;">正在上传...</div>
+    
+    <header class="mui-text-center">
+       <h2>修改头像</h2>
+       <hr />
+    </header>
+    <div class="mui-content bgw">
+    	<center>
+    	    <!--<form id="uploadForm" enctype="multipart/form-data" method="post" >-->
+        	    <input type="file" id="fileObj" name="photo" />
+        	    <br>
+                <em>图片最大为2M</em>
+                <div class="user-avatar" id="userAvatar" style="width: 200px; height: 200px;">
+                	<if condition="empty($avatar)">
+    	            	<img src="__TMPL__Public/assets/images/headicon_128.png" class="headicon"/>
+    	            <else/>
+    	            	<img src="{:sp_get_user_avatar_url($avatar)}?t={:time()}" class="headicon"/>
+    	            </if>
+                </div>
+                <input class="mt20" id="saveAvatar" type="button" value="确认修改" />
+            <!--</form>-->
+        </center>
+    </div>
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script src="__PUBLIC__/js/wind.js"></script>
+<script src="__TMPL__Public/assets/js/swiperSlide/spin.min.js"></script>
+<script src="__TMPL__Public/assets/js/swiperSlide/jquery.spin.js"></script>
+<script>
+    /*var jcrop_api;
+    $('#previewAvatar').Jcrop({
+        maxSize: [100, 100], // max crop size
+        aspectRatio : 1, // keep aspect ratio 1:1
+        bgFade: true, // use fade effect
+        bgOpacity: .3, // fade opacity
+        setSelect: [ 30, 40, 130, 140 ],
+    }, function(){
+
+        // use the Jcrop API to get the real image size
+        var bounds = this.getBounds();
+        boundx = bounds[0];
+        boundy = bounds[1];
+
+        // Store the Jcrop API in the jcrop_api variable
+        jcrop_api = this;
+    });*/
+    
+    /**
+     * 图片预览
+     */
+    /*$("#fileObj").change(function(evt) {
+        var obj = $(this).val();
+        alert(obj);
+    });*/
+   
+    /**
+     * 图片上传
+     */
+    $('#saveAvatar').click(function() {
+        var imgPath = $("input[name=photo]").val();
+    	
+      	//判断是否有选择上传文件
+        if (imgPath == "") {
+        	mui.toast("请选择上传图片！");
+            return;
+        }
+      	
+        //判断上传文件的后缀名
+        var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1).toLowerCase();
+        if (strExtension != 'jpg' && strExtension != 'png' && strExtension != 'jpeg') {
+        	mui.toast("请选择图片文件");
+            return;
+        }
+        
+        Wind.use("ajaxfileupload","noty",function(){
+            
+            $('#previewSpin').spin({color: '#fff'});
+            $('#previewText').show();
+            $("#spinBody").addClass('spin-body');
+            
+            $.ajaxFileUpload({
+                url:"{:leuu('Member/saveAvatar')}",
+                secureuri:false,
+                fileElementId:"fileObj",
+                dataType: 'json',
+                data:{},
+                success: function (data, status){
+                    if(data.result == 1){
+                        mui.toast("上传成功");
+                        window.location.reload();
+                    }else {
+                        $('#previewSpin').spin(false);
+                        $("#spinBody").removeClass('spin-body');
+                        
+                        noty({text: data.error,
+                            type:'error',
+                            layout:'center'
+                        });
+                    }
+                },
+                error: function (data, status, e){}
+            });
+        });
+        
+        /*$.ajax({
+            type: "POST",
+            url: "{:leuu('Member/saveAvatar')}",
+            data: new FormData($('#uploadForm')[0]),
+            beforeSend: function() {
+                $('#previewSpin').spin({color: '#fff'});
+                $('#previewText').show();
+                $("#spinBody").addClass('spin-body');
+            },
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(str, status) {
+				switch(str.result) {
+				case 1: {
+//				    $('#previewSpin').spin(false);
+//                  $('#previewText').hide();
+//                  $("#spinBody").removeClass('spin-body');
+//                  $('#previewAvatar').attr('src',str.avatar);
+					mui.toast("上传成功");
+                    window.location.reload();
+				} break;
+				case -1: {
+					alert(str.error);
+				} break;
+				default:break;
+				}
+			},
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert("上传失败，请检查网络后重试");
+            }
+        });*/
+    });
+</script>
+</body>
+</html>

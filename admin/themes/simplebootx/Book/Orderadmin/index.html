@@ -1,0 +1,124 @@
+<admintpl file="header" />
+</head>
+<body>
+<div class="wrap js-check-wrap">
+	<form class="well form-search" method="post" action="{:leuu('Orderadmin/index')}">
+		分类： 
+		<select name="term" style="width: 120px;">
+			<option value='0'>全部</option>
+			<option value='1'>待付款</option>
+			<option value='2'>待发货</option>
+			<option value='3'>待收货</option>
+			<option value='4'>待评价</option>
+			<option value='5'>交易完成</option>
+			<option value='6'>交易取消</option>
+			<option value='7'>支付超时</option>
+		</select> &nbsp;&nbsp;
+		时间：
+		<input type="text" name="start_time" class="js-datetime" value="{$formget.start_time|default=''}" style="width: 120px;" autocomplete="off">-
+		<input type="text" class="js-datetime" name="end_time" value="{$formget.end_time|default=''}" style="width: 120px;" autocomplete="off"> &nbsp; &nbsp;
+		关键字： 
+		<input type="text" name="keyword" style="width: 200px;" value="{$formget.keyword|default=''}" placeholder="请输入关键字...">
+		<input type="submit" class="btn btn-primary" value="搜索" />
+		<a class="btn btn-danger" href="{:leuu('Orderadmin/index')}">清空</a>
+	</form>
+	<table class="table table-hover table-bordered table-list">
+	<thead>
+		<tr>
+			<th width="15"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+			<notempty name="term">
+			<th width="50">{:L('SORT')}</th>
+			</notempty>
+			<th width="50">ID</th>
+			<th width="100">{:L('ORDER_SN')}</th>
+			<th width="50">{:L('MEMBER_ID')}</th>
+			<th width="50">{:L('ADDR_ID')}</th>
+			<th width="50">{:L('POSTAGE')}</th>
+			<th width="100">{:L('EXP_SN')}</th>
+			<th width="50">{:L('TOTAL_PRICE')}</th>
+			<th width="50">{:L('PAY_CHANNEL')}</th>
+			<th>{:L('REMARK')}</th>
+			<th width="50">{:L('STATUS')}</th>
+			<th width="70">{:L('PUBLISH_DATE')}</th>
+			<th width="50">{:L('OPERATION')}</th>
+		</tr>
+	</thead>
+	<foreach name="orders" item="vo">
+	<tr>
+		<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}" title="ID:{$vo.id}"></td>
+		<notempty name="term">
+		<td><input name="listorders[{$vo.order_id}]" class="input input-order" type="text" size="5" value="{$vo.listorder}"></td>
+		</notempty>
+        <td><b>{$vo.order_id}</b></td>
+		<td>
+			<a href="{:leuu('Book/Shopping/adminDetail',array('orderID'=>$vo['order_id']))}" target="_blank">{$vo['order_sn']}</a>
+		</td>
+		<td>{$vo['member_id']}</td>
+		<td>{$vo['addr_id']}</td>
+		<td>￥{$vo['postage']}</td>
+		<td>{$vo['exp_sn']}</td>
+		<td>￥{$vo['total_price']}</td>
+		<td>
+			<if condition="$vo['pay_channel'] eq 1">微信支付
+			<else />货到付款
+			</if>
+		</td>
+		<td>{$vo['remark']}</td>
+		<td>
+			<switch name="vo['status']" >
+           	    <case value="1">待付款</case>
+           	    <case value="2"><strong>待发货</strong></case>
+           	    <case value="3">待收货</case>
+           	    <case value="4">待评价</case>
+           	    <case value="5">交易完成</case>
+           	    <case value="6">交易取消</case>
+           	    <case value="7">支付超时</case>
+           	    <default />
+           	</switch>
+		</td>
+		<td>{:date('Y-m-d H:i',$vo['create_time'])}</td>
+		<td>
+			<if condition="$vo['status'] eq 2">
+				<a href="{:leuu('Orderadmin/confirmOrder',array('id'=>$vo['order_id']))}">{:L('CONFIRM')}</a>
+			<elseif condition="$vo['status'] eq 3" /> 
+				<a href="{:leuu('Orderadmin/editOrder',array('id'=>$vo['order_id']))}">{:L('EDIT_DELIVERY')}</a>
+			</if>
+		</td>
+	</tr>
+	</foreach>
+	<tfoot>
+		<tr>
+			<th width="15"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+			<notempty name="term">
+			<th width="50">{:L('SORT')}</th>
+			</notempty>
+			<th width="50">ID</th>
+			<th width="100">{:L('ORDER_SN')}</th>
+			<th width="50">{:L('MEMBER_ID')}</th>
+			<th width="50">{:L('ADDR_ID')}</th>
+			<th width="50">{:L('POSTAGE')}</th>
+			<th width="100">{:L('EXP_SN')}</th>
+			<th width="50">{:L('TOTAL_PRICE')}</th>
+			<th width="50">{:L('PAY_CHANNEL')}</th>
+			<th>{:L('REMARK')}</th>
+			<th width="50">{:L('STATUS')}</th>
+			<th width="70">{:L('PUBLISH_DATE')}</th>
+			<th width="50">{:L('OPERATION')}</th>
+		</tr>
+	</tfoot>
+	</table>
+	<div class="pagination">{$page}</div>
+</div>
+<script src="__PUBLIC__/js/common.js"></script>
+<script>
+$(document).ready(function() {
+	var taxonomy = "{$taxonomys}";
+	$('option').each(function(i) {
+		if($('option').eq(i).val()==taxonomy) {
+			$('option').eq(i).attr('selected',true);
+		}
+	});
+});
+</script>
+</body>
+</html>

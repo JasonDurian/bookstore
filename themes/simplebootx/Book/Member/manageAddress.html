@@ -1,0 +1,142 @@
+<tc_include file="Public:bookhead" />
+<style>
+#addButton {padding-top:20px;}
+#addAddress {width:25%; min-width:100px;}
+</style>
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+   <h2>管理收货地址</h2>
+</header>
+<div class="mui-content bgw">
+    <ul id="ulTab" class="mui-table-view lists">
+        <foreach name='address' item='vo'>
+            <li class="mui-table-view-cell">
+                <div class="mui-slider-right mui-disabled">
+                    <input class="addr-id" type="hidden" value="{$vo['addr_id']}" />
+                    <a class="mui-btn mui-btn-red">删除</a>
+                </div>
+                <div class="mui-slider-handle">
+                	<a href="{:leuu('Member/editAddress',array('addrID'=>$vo['addr_id']))}">
+    	            	<span class="fl">{$vo['contact']}</span><span class="fr">{$vo['mobile']}</span><br />
+    	            	<span>{$vo['province']}{$vo['city']}{$vo['district']}{$vo['address']}</span>
+                	</a>
+            	</div>
+            </li>
+            <li class="mui-table-view-cell">
+            	<div class="mui-radio fl">
+            		<php>
+            			$default = $vo['is_default']==1 ? "checked='checked'" : "";
+            			$defaultText = $vo['is_default']==1 ? "默认地址" : "设为默认";
+        	    	</php>
+        	    	<label class="default-addr">{$defaultText}</label>
+                    <input name="defaultRadio" type="radio" {$default}/>
+                    <input name="addrID" type="hidden" value="{$vo['addr_id']}" />
+                </div>
+                <div class="fr">
+                    <a href="{:leuu('Member/editAddress',array('addrID'=>$vo['addr_id']))}">
+                        <img alt="编辑" src="{:sp_get_asset_upload_path('img/edit.png')}">
+                        <span>编辑</span>
+                    </a>
+                </div>
+            </li>
+   	    </foreach>
+    </ul>
+   
+    <div id="addButton" class="mui-text-center">
+        <button class="mui-btn red" id="addAddress">添加收货地址</button>
+    </div>
+</div>
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+	//从编辑页面返回时，需要重新选择默认地址
+	/*$(document).ready(function(){
+		var inputRadio = $("input[name=defaultRadio]");
+		inputRadio.each(function(i) {
+			var defaultAdd = inputRadio[i].value;
+			defaultAdd = (defaultAdd=='1'?true:false);
+			
+			if(defaultAdd) {
+				$('.default-addr')[i].innerText='默认地址';
+				inputRadio.eq(i).attr("checked",'checked');
+			}
+		});
+	});*/
+	
+	$(":radio").change(function() {
+		chooseDefault();
+	});
+	
+	$("#addAddress").click(function() {
+		var url = "{:leuu('Member/addAddress')}";
+		document.location.href = url;
+	});
+	
+	function chooseDefault() {
+		var inputRadio = $("input[name=defaultRadio]");
+		inputRadio.each(function(i) {
+			var is_checked = inputRadio[i].checked;
+			
+			if(is_checked) {
+				var inputAddID = $("input[name=addrID]").eq(i).val();	
+				$.ajax({
+					type: "post",
+					url: "{:leuu('Member/defaultAddress')}",
+					data: {addrID:inputAddID},
+					dataType: "json",
+					success: function(str) {
+						switch(str.result) {
+						case 1: {
+							//$('.default-addr')[i].innerText='默认地址';
+							inputRadio[0].checked = true;      //解决火狐浏览器中radio不会随着页面刷新变化的问题
+							window.location.reload();
+						} break;
+						case -1: {
+							mui.toast("操作失败");
+						} break;
+						default:break;
+						}
+					}
+				});
+			}
+		});
+	}
+	
+//	(function($) {
+        $('.mui-btn-red').on('tap', function(event) {
+            //用到mui的内置方法，似乎只能用原生js代码
+            var li = this.parentNode.parentNode;
+            var addrID = $(this).parent().children('.addr-id').val();
+            mui.confirm('确认删除？', '叮当书店', function(e) {
+                if (e.index == 0) {
+                    setTimeout(function() {
+                        mui.swipeoutClose(li);        //mui内置方法
+                    }, 0);
+                }else {
+                    $.ajax({
+                        type: "post",
+                        url: "{:leuu('Member/deleteAddress')}",
+                        data: {addr_id:addrID},
+                        dataType: "json",
+                        success: function(str) {
+                            switch(str.result) {
+                            case 1: {
+                                mui.toast("删除成功");
+                                window.location.reload();
+                            } break;
+                            case -1: {
+                                mui.toast("操作失败");
+                            } break;
+                            default:break;
+                            }
+                        }
+                    });
+                }
+            });
+        });
+//	}(mui));
+
+</script>
+</body>
+</html>

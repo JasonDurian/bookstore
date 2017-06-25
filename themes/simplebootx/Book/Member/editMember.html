@@ -1,0 +1,55 @@
+<tc_include file="Public:bookhead" />
+<style>
+.mui-row li {list-style-type:none}
+</style>
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+   <h2>个人信息</h2>
+</header>
+<div class="mui-content bgw">
+    <div class="mui-row">
+        <div class="mui-col-sm-12 mui-col-xs-12">
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right" href="{:U('Member/editAvatar')}">
+                    <span>编辑头像</span>    
+                </a>
+            </li>
+            
+            <li class="mui-table-view-cell">
+                <a id="myMobile" class="mui-navigate-right">
+                    <span>手机号码</span>    
+                    <span style="float:right;margin-right:20px;">{$information['mobile']}</span>
+                </a>
+            </li>
+            
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right" href="{:U('Member/editNiceName')}">
+                    <span>我的昵称</span>   
+                    <span style="float:right;margin-right:20px;">{$information['nick_name']}</span>
+                </a>
+            </li>
+            
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right" href="{:U('Member/manageAddress')}">
+                    <span>收货地址</span>    
+                </a>
+            </li>
+            
+            <li class="mui-table-view-cell">
+                <a href="{:U('Member/loginOut')}">
+                    <span class="fr red">退出登录</span>    
+                </a>
+            </li>
+            
+        </div>
+</div>
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+$('#myMobile').click(function() {
+	mui.toast("手机号码作为登录方式，暂时无法修改");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<tc_include file="Public:bookhead" />
+<style>
+#tableCell {
+    padding-left:30%;
+    margin-bottom:54px;
+}
+</style>
+</head>
+<body class="bgw">
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper bgw">
+        <div class="mui-scroll">
+            <header class="mui-text-center">
+                <p class="oper_header">订单详情</p>
+            </header>
+            <div class="red" style="padding-left:1%;padding-top:5%;height:10%;min-height:58px;background-color:Azure;">
+              	<span class="mui-icon mui-icon-flag fl"></span>
+              	<h4 id="orderStatus"></h4>
+            </div>
+            <ul class="mui-table-view">
+              	<li class="mui-table-view-cell">
+                   	<span class="addrl">{$orderAddr['contact']}</span>
+                   	<span class="mui-icon mui-icon-location fl"></span>
+                   	<span class="addrr fr">{$orderAddr['mobile']}</span><br />
+                   	<span class="addrl">{$orderAddr['province']}{$orderAddr['city']}{$orderAddr['district']}{$orderAddr['address']}</span>
+              	</li>
+                <foreach name='books' item='vo'>
+                	<li class="mui-table-view-cell">
+                	<a class="is-href" href="{:leuu('Detail/index',array('id'=>$vo['goods_id']))}">
+                		<img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+                		<div class="mui-media-body">
+                			{$vo['name']}
+                			<p class="price">
+                			价格：<span class="red">￥</span><span class="now_price red">{$vo['now_price']}</span>
+                			    <span class="delete">&nbsp;￥</span><span class="pre_price delete">{$vo['pre_price']}</span><br />	
+                			数量：x<span class="goodsNUM">{$vo['num']}</span>
+                			</p>
+                		</div>
+                	</a>	
+                	</li>
+                </foreach>
+                <div id="tableCell">
+            	  <li class="mui-table-view-cell">总金额 
+            	      <span id="totalPrice" class="fr"></span>
+            	  </li>
+            	  <li class="mui-table-view-cell">优惠金额
+            	      <span id="reducePrice" class="fr"></span>
+            	  </li>
+            	  <li class="mui-table-view-cell">总商品数
+            	      <span id="totalNUM" class="fr"></span>
+            	  </li>
+            	  <li class="mui-table-view-cell">运费
+            	      <span class="fr">￥0</span>
+            	  </li>
+            	  <li class="mui-table-view-cell">应付金额
+            	      <span class="fr">￥{$orderDetail['total_price']}</span>
+            	  </li>
+            	  <li class="mui-table-view-cell">单号
+            	      <span class="fr">{$orderDetail['order_sn']}</span>
+            	  </li>
+            	  <li class="mui-table-view-cell">买家备注
+            	      <span class="fr">{$orderDetail['remark']}</span>
+            	  </li>
+            	  <li class="mui-table-view-cell">下单时间
+            	      <span class="fr">{$orderDetail['create_time']|date='Y-m-d H:i:s', ###}</span>
+            	  </li>
+            	  <li class="mui-table-view-cell">结束时间
+            	  	  <if condition="$orderDetail['end_time'] neq '0'">
+            	      <span class="fr">{$orderDetail['end_time']|date='Y-m-d H:i:s', ###}</span>
+            	      </if>
+            	  </li>
+                </div>
+            </ul>	
+        </div>
+        <div class="footer-fixed">
+          	<div class="order-oper-btn" id="orderBtn1">
+              <button class="white" id="orderOperation" onclick="orderOperation({$orderDetail['order_id']},{$orderDetail['status']})"></button>
+        
+            </div>
+            <div class="order-oper-btn" id="orderBtn2">
+              <button class="bgw" id="orderCancel" onclick="orderCancel({$orderDetail['order_id']})"></button>
+            </div>
+        </div>
+    </div>
+
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+	$(document).ready(function() {
+		var orderStatus = "{$orderDetail['status']}";
+		var htmlStr1 = "";
+		var htmlStr2 = "";
+		var htmlStr3 = "";
+		switch(orderStatus){
+    		case "1": {htmlStr1 = "等待付款，请在2小时内完成付款";htmlStr2 = "现在付款";htmlStr3 = "取消交易";}break;
+    		case "2": {htmlStr1 = "即将发货";htmlStr2 = "提醒发货";}break;
+    		case "3": {htmlStr1 = "正在来的路上";htmlStr2 = "确认收货";}break;
+    		case "4": {htmlStr1 = "期待您的评价";htmlStr2 = "去评价";}break;
+    		case "5": {htmlStr1 = "交易完成";}break;
+    		case "6": {htmlStr1 = "交易取消";}break;
+    		case "7": {htmlStr1 = "支付超时";}break;
+    		default:break;
+		}
+		$('#orderStatus').html(htmlStr1);
+		if(htmlStr2=="") {
+			$('#orderBtn1').html(' ');
+		}else {
+			$('#orderOperation').html(htmlStr2);
+		}
+		if(htmlStr3=="") {
+			$('#orderBtn2').html(' ');
+		}else {
+			$('#orderCancel').html(htmlStr3);
+		}
+		calculate();
+	});
+	
+	function calculate() {
+		var totalPrice = 0;
+		var reducePrice = 0;
+		var totalNUM = 0;
+		$('p.price').each(function(i) {
+			//var goods_now = $("span.now_price").eq(i).html();
+			var goods_pre = $("span.pre_price").eq(i).html();
+			var goods_num = $("span.goodsNUM").eq(i).html();
+			totalPrice += (goods_num * goods_pre);
+			totalNUM += parseInt(goods_num);
+		});
+		totalPrice = totalPrice.toFixed(2);
+		reducePrice = (totalPrice-"{$orderDetail['total_price']}").toFixed(2);
+		$("span#totalPrice").html("￥"+totalPrice);
+		$("span#reducePrice").html("￥"+reducePrice);
+		$("span#totalNUM").html("x"+totalNUM);
+	}
+	
+	/**
+     * 订单操作
+     */
+    function orderOperation(order_id,orderStatus) {
+        var payStatus = 0;
+        switch(orderStatus) {
+            case 1: {
+                var result = confirm("确认付款？");
+                if(result) {
+                    payStatus = 2;          //已付款，待发货
+                }
+            }break;
+            case 2: {
+                mui.toast('提醒成功');
+            }break;
+            case 3: {
+                payStatus = 4;
+                mui.toast("收货成功");
+            }break;
+            case 4: {
+                var url = "{:leuu('Shopping/releaseComm')}&orderID=" + order_id;
+                document.location.href = url;
+            }break;
+            default:break;
+        }
+        operation(payStatus,order_id);
+    }
+    
+    /**
+     * 异步更新订单状态
+     */
+    function operation(payStatus,order_id) {
+        if(payStatus != 0) {
+            $.ajax({
+                type: "post",
+                url: "{:leuu('Shopping/updateStatus')}",
+                data: {myStatus:payStatus,orderID:order_id},
+                dataType: "json",
+                success: function(str) {
+                    switch(str.result) {
+                    case 1: {
+                        window.location.reload();
+                    } break;
+                    case -1: {
+                        alert("操作失败");
+                    } break;
+                    default:break;
+                    }
+                }
+            });
+        }
+    }
+    
+    /**
+     * 待付款页面取消订单
+     */
+    function orderCancel(order_id) {
+        var result = confirm("确认取消？");
+        if(result) {
+            operation(6,order_id);
+        }
+    }
+
+</script>
+</body>
+</html>

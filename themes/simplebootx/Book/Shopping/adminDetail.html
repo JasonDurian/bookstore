@@ -1,0 +1,114 @@
+<tc_include file="Public:bookhead" />
+<style>
+#tableCell {padding-left:30%; margin-bottom:54px;}
+#footerFix {position: fixed; bottom: 34px; right: 14px; width:40%; min-width:260px;}
+</style>
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+	<h2>订单详情</h2>
+</header>
+<div class="mui-content bgw">
+  <div class="red" style="padding-left:1%;padding-top:5%;height:10%;min-height:58px;background-color:Azure;">
+  	 <span class="mui-icon mui-icon-flag fl"></span>
+  	 <h4 id="orderStatus"></h4>
+  </div>
+  <ul class="mui-table-view">
+  	<li class="mui-table-view-cell">
+       	<span class="addrl">{$orderAddr['contact']}</span>
+       	<span class="mui-icon mui-icon-location fl"></span>
+       	<span class="addrr fr">{$orderAddr['mobile']}</span><br />
+       	<span class="addrl">{$orderAddr['province']}{$orderAddr['city']}{$orderAddr['district']}{$orderAddr['address']}</span>
+  	</li>
+  <foreach name='books' item='vo'>
+	<li class="mui-table-view-cell">
+	<a href="{:leuu('Detail/index',array('id'=>$vo['goods_id']))}">
+		<img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+		<div class="mui-media-body">
+			{$vo['name']}
+			<p class="price">
+			价格：<span class="red">￥</span><span class="now_price red">{$vo['now_price']}</span>
+			    <span class="delete">&nbsp;￥</span><span class="pre_price delete">{$vo['pre_price']}</span><br />	
+			数量：x<span class="goodsNUM">{$vo['num']}</span>
+			</p>
+		</div>
+	</a>	
+	</li>
+  </foreach>
+  <div id="tableCell">
+	  <li class="mui-table-view-cell">总金额 
+	      <span id="totalPrice" class="fr">111111111</span>
+	  </li>
+	  <li class="mui-table-view-cell">优惠金额
+	      <span id="reducePrice" class="fr">22</span>
+	  </li>
+	  <li class="mui-table-view-cell">总商品数
+	      <span id="totalNUM" class="fr">33</span>
+	  </li>
+	  <li class="mui-table-view-cell">运费
+	      <span class="fr">￥0</span>
+	  </li>
+	  <li class="mui-table-view-cell">应付金额
+	      <span class="fr">￥{$orderDetail['total_price']}</span>
+	  </li>
+	  <li class="mui-table-view-cell">单号
+	      <span class="fr">{$orderDetail['order_sn']}</span>
+	  </li>
+	  <li class="mui-table-view-cell">买家备注
+	      <span class="fr">{$orderDetail['remark']}</span>
+	  </li>
+	  <li class="mui-table-view-cell">下单时间
+	      <span class="fr">{$orderDetail['create_time']|date='Y-m-d H:i:s', ###}</span>
+	  </li>
+	  <li class="mui-table-view-cell">结束时间
+	  	  <if condition="$orderDetail['end_time'] neq '0'">
+	      <span class="fr">{$orderDetail['end_time']|date='Y-m-d H:i:s', ###}</span>
+	      </if>
+	  </li>
+  </div>
+  </ul>	
+  <div id="footerFix">
+  </div>
+</div>
+
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+	$(document).ready(function() {
+		var orderStatus = "{$orderDetail['status']}";
+		var htmlStr1 = "";
+		switch(orderStatus){
+		case "1": {htmlStr1 = "等待付款";}break;
+		case "2": {htmlStr1 = "即将发货";}break;
+		case "3": {htmlStr1 = "正在来的路上";}break;
+		case "4": {htmlStr1 = "期待您的评价";}break;
+		case "5": {htmlStr1 = "交易完成";}break;
+		case "6": {htmlStr1 = "交易取消";}break;
+		case "7": {htmlStr1 = "支付超时";}break;
+		default:break;
+		}
+		$('#orderStatus').html(htmlStr1);
+		calculate();
+	});
+	
+	function calculate() {
+		var totalPrice = 0;
+		var reducePrice = 0;
+		var totalNUM = 0;
+		$('p.price').each(function(i) {
+			var goods_now = $("span.now_price").eq(i).html();
+			var goods_pre = $("span.pre_price").eq(i).html();
+			var goods_num = $("span.goodsNUM").eq(i).html();
+			totalPrice += (goods_num * goods_pre);
+			totalNUM += parseInt(goods_num);
+		});
+		totalPrice = totalPrice.toFixed(2);
+		reducePrice = (totalPrice-"{$orderDetail['total_price']}").toFixed(2);
+		$("span#totalPrice").html("￥"+totalPrice);
+		$("span#reducePrice").html("￥"+reducePrice);
+		$("span#totalNUM").html("x"+totalNUM);
+	}
+	
+</script>
+</body>
+</html>

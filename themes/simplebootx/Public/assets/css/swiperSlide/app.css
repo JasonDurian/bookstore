@@ -1,0 +1,528 @@
+/*
+ *这是单独为hello mui准备的个性化css，可以覆盖标准mui的css定义；
+ * 在实际项目开发时，建议为App单独写一个css文件，从而实现项目的自定义皮肤功能；
+ * 
+ * */
+@CHARSET "UTF-8";
+body{background-color: #EBEBEB;color: #666666;}
+a,p,a:enabled:active{color: #666666;}
+.fl{float: left;}
+.fr{float: right;}
+.f14{font-size: 14px;}
+.f18{font-size: 18px;}
+.white{color: #fff;}
+.red{color: #DB0000;}
+.blue{color: #B0C4D5;}
+.grey{color: #9b9b9b;}
+.bgw{background-color: #ffffff!important;}
+.mt10{margin-top: 10px;}
+.mt20{margin-top: 20px;}
+.mr10{margin-right: 10px;}
+.mb20{margin-bottom: 20px;}
+/*mui-bar*/
+.mui-content{padding-bottom: 54px;}
+.mui-bar .mui-btn{top: 4px;}
+.mui-bar .mui-btn .mui-icon{float: left;margin:-2px 0 0 -4px;color: #555555;}
+.mui-bar .mui-btn .btn-nob{float: right;margin:-4px 5px 0 0;font-size: 0.8rem;padding: 0 10px;}
+.mui-bar{background: #ffffff;box-shadow: none;-moz-box-shadow:none;-webkit-box-shadow:none;}
+.mui-bar .mui-title{color: #5D6570;}
+.logo.fl{margin-left: 20px;}
+.select-dian{float: right;width: 30%;background-color:transparent;margin-right: 10px;}
+.mui-title.sec-title{line-height: 25px;font-size: 0.9rem;}
+.mui-title.sec-title span{line-height: 14px;font-size: 0.7rem;font-weight: normal;display: block;}
+.mui-content{background-color: #EBEBEB;}
+.mui-content-padded{margin: 20px;}
+/*input button*/
+input[type='text'],input[type='password'],input[type='date'],select
+{background: #ffffff;border-color: #aaaaaa;color: #666666;height:34px;border-radius: 4px;font-size: 14px;}
+.mui-input-group {margin-bottom: 15px;}
+.mui-input-group .mui-input-row{height: auto;}
+.mui-input-row label+input{background: #ffffff;border:1px solid #ccc;height: 28px;margin: 6px 0 0 0;width: 60%;float: left;padding: 0 15px;}
+.mui-checkbox.mui-left input[type=checkbox],.mui-radio.mui-left input[type=radio]{left: 4px;}
+.mui-checkbox input[type=checkbox],.mui-radio input[type=radio]{top:1px;}
+.mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before{color: #DB0000;}
+.mui-checkbox input[type=checkbox]:before, .mui-radio input[type=radio]:before{font-size: 24px;}
+.mui-input-group input,.mui-input-group textarea{border-radius: 4px;}
+.mui-input-row label~input, .mui-input-row label~select, .mui-input-row label~textarea{border: 1px solid #ccc;}
+.mui-radio input[type=radio]:checked:before{content: '\e442';}
+input[type=search]{background: #fff url(../img/icon-search.png) 98% 50% no-repeat;width: 90%;margin: 10px auto;border: 1px solid #ddd;text-align: left;}
+button,
+input[type='button'],
+input[type='reset'],
+input[type='submit']{background: #DB0000;border-color: #DB0000;margin-bottom: 20px;height: 34px;border-radius: 4px;color: #ffffff;}
+.mui-btn, button{border-color: #ccc;color: #666;}
+.mui-btn.w50, button.w50{width: 48%;}
+.mui-btn.red, button.red{border-color: #DB0000;color: #fff;background-color:#DB0000;}
+.mui-btn.redborder, button.redborder{border-color: #DB0000;color: #DB0000;}
+.mui-btn.btn-nob{border: none;padding: 0;height: 1rem;margin-bottom: 20px;}
+input[type=submit].mui-btn-block.mb20{margin-bottom: 20px;}
+input[type='button']:enabled:active, input[type='button'].mui-active:enabled,
+input[type='submit']:enabled:active,input[type='submit'].mui-active:enabled,
+input[type='reset']:enabled:active,input[type='reset'].mui-active:enabled,
+button:enabled:active,button.mui-active:enabled,
+.mui-btn:enabled:active,.mui-btn.mui-active:enabled
+{color: #fff;background-color: #FF5858;border-color: #FF5858;}
+.mui-bar .mui-btn-link{color:#303030;}
+input[disabled]{background: #ccc;border-color:#ccc;}
+select{margin-top: 1px;line-height: 14px;background: #ffffff url(../img/icon-arrow-down.png) 92% 50% no-repeat;border-color: #ccc;}
+.mui-input-row select{height: 38px;line-height: 38px;}
+textarea{background: #ffffff;border-color: #aaaaaa;border-radius: 4px;color: #666666;font-size: 14px;}
+.mui-btn-block{padding: 0;margin: 20px auto;border: none;background-color: #DB0000;border-radius: 4px;color: #fff;}
+.mui-btn-block .mui-icon{font-size: 24px;font-weight: bold;}
+input[type=submit].mui-btn-block{width: 100%;margin: 0px auto;}
+.mui-btn-block.w100{width: 100%;}
+/*切换mui-segmented-control1 mui-control-item1 保证连接点击可以跳转页面 初始化的样式*/
+.mui-segmented-control1
+{font-size: 15px;font-weight: 400;position: relative;display: table;overflow: hidden;width: 100%;
+    table-layout: fixed;border: 1px solid #007aff;border-radius: 3px;background-color: transparent;-webkit-touch-callout: none;}
+.mui-segmented-control1 .mui-control-item1
+{display: table-cell;overflow: hidden;width: 1%;line-height: 38px;
+    -webkit-transition: background-color .1s linear;transition: background-color .1s linear;text-align: center;
+    white-space: nowrap;text-overflow: ellipsis;color: #007aff;border-color: #007aff;border-left: 1px solid #007aff;}
+.two-row .mui-segmented-control1 .mui-control-item1{line-height: 28px;}
+.mui-segmented-control1 .mui-control-item1:first-child{border-left-width: 0;}
+.mui-segmented-control1 .mui-control-item1.mui-active{color: #fff;background-color: #007aff;}
+.mui-segmented-control1.mui-segmented-control-inverted{width: 100%;border: 0;border-radius: 0;}
+.mui-segmented-control1.mui-segmented-control-inverted .mui-control-item1{color: inherit;border: 0;}
+.mui-segmented-control1.mui-segmented-control-inverted .mui-control-item1.mui-active{color: #007aff;border-bottom: 2px solid #007aff;background: none;}
+/*切换tab*/
+.mui-tab-item{color:#666;}
+.mui-slider .mui-segmented-control.mui-segmented-control-inverted .mui-control-item,
+.mui-slider .mui-segmented-control1.mui-segmented-control-inverted .mui-control-item1{color: #666;background: #fff;font-size: 0.8rem;}
+.mui-slider .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active,
+.mui-slider .mui-segmented-control1.mui-segmented-control-inverted .mui-control-item1.mui-active{color: #666;background: #fff;border-bottom: 2px solid #DB0000;}
+.mui-slider .mui-segmented-control.mui-segmented-control-inverted .mui-control-item em,
+.mui-slider .mui-segmented-control1.mui-segmented-control-inverted .mui-control-item1 em{font-style: normal;font-size: 1rem;color: #DB0000;}
+.mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item,
+.mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item1{border: none;}
+/*mui-table-view*/
+.mui-content>.mui-table-view:first-child{margin-top: 0px;}
+.mui-table-view:before{background-color: #ddd;height: 0;}
+.mui-table-view-cell{color: #000;}
+.mui-table-view-cell:after{background-color: #ddd;left: 0;}
+.mui-table-view-cell>a:not(.mui-btn){white-space: normal;}
+.mui-table-view .mui-media-object {line-height: 86px;max-width: 86px;height: 86px;}/*wendy 改图书比例正方形*/
+.mui-table-view .fav {min-height: 86px;}/*wendy 改图书比例正方形*/
+.price{padding: 6px 0 4px 0;}/*wendy 改图书比例正方形*/
+.price .delete{text-decoration: line-through;}
+.price .mui-icon{font-size: 1rem;color: #CCCCCC;padding: 0;}
+.price .mui-icon.red{color: #F74242;}
+/*顶部分类导航*/
+nav.menu-bar{overflow: hidden;padding: 3px 0 12px 0;}
+nav.menu-bar a{width: 25%;float: left;}
+nav.menu-bar a.mui-active{color: #DB0000;}
+nav.menu-bar.mui-text-left{padding-left: 20px;}
+nav.menu-bar a.fr{float: right;font-size: 0.8rem;}
+/*个人信息*/
+.form-tit{margin: 0 0 10px 20px;}
+.form-tit.mt20{margin-top:20px ;}
+.mui-input-group .mui-input-row:after{left: 0;}
+.mui-input-row label{padding: 10px 0 10px 20px;color: #666;}
+.mui-input-row .w50{width: 50%;}
+.mui-input-row span{padding: 10px 0;float: left;width: 60%;color: #000;}
+.mui-input-row span a,
+.mui-input-row span.red{color: #DB0000;}
+.mui-input-row em{color: #DB0000;font-style: normal;}
+.mui-input-group .mui-input-group .mui-input-row:after{background: none;}
+.mui-input-group .mui-input-group:before{background: none;}
+.mui-input-group.noafter:after{background: none;}
+
+.user-avatar {
+    display:inline-block;
+    margin:5px auto;
+    width:46px;
+    height:46px;
+    border-radius:100px;
+    border:2px solid #fff;
+    overflow:hidden;
+    -webkit-box-shadow:0 0 3px #ccc;
+    box-shadow:0 0 3px #ccc;
+}
+.user-avatar > img {
+    width:auto;
+    height:auto;
+    max-width:100%;
+    max-height:100%;
+}
+
+.loading-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 28px;
+    margin-left: -28px;
+    z-index: 200000000;
+}
+.spin-body {
+    position: absolute;
+    top: 0;  
+    left: 0;
+    width: 100%;  
+    height: 100%;
+    z-index: 777;
+    background-color: #000;  
+    opacity: 0.6; 
+}
+
+/*中信无法访问的页面的格式*/
+.oper_header{
+    line-height: 50px;
+    font-size: 18px;
+    text-align: center;
+    margin: 0 auto;
+    color: #5D6570;
+    font-family: "SimSun", "宋体";
+}
+
+.order_bottom {border-bottom: 2px solid #db0000;}
+
+
+/*会员*/
+.login{margin-top: 20px;}
+.login label{color: #999999;margin-bottom: 10px;display: block;}
+.btn-white{border:1px solid #DB0000;background: #ffffff;color: #DB0000;}
+input[type='text'].yzm{width: 25%;margin-right: 5%;}
+.mui-input-row label~input[type='button'].btn-yzm{color: #fff;width: 30%;float: left;height: 28px;margin-top: 5px;line-height: 16px;border-color: #DB0000;}
+.my-info .mui-input-row label{padding: 10px 0 10px 20px;color: #ACB6BF;}
+#weixin-tip{display:none; position: fixed; left:0; top:0; background: rgba(0,0,0,0.8); filter:alpha(opacity=80); width: 100%; height:100%; z-index: 100;}
+#weixin-tip p{text-align: center; margin-top: 10%; padding:0 5%; position: relative;}
+#weixin-tip .close{color: #fff;padding: 5px;font: bold 20px/20px simsun;text-shadow: 0 1px 0 #ddd;position: absolute;top: 0; left: 5%;}
+/*分类*/
+.category{background: #fff;overflow: hidden;list-style: none;margin: 0 0 20px 0;padding: 0;border: 1px solid #ddd;}
+.category li{float: left;width: 50%;}
+.category li a{display: block;border: 1px solid #ddd;text-align: center;padding: 0.4rem;}
+.category li a.on{border: 1px solid #DB0000;color: #DB0000;}
+/*店铺*/
+.store p{padding: 0 50px 0 20px;}
+.store .mui-radio input[type='radio']{margin-top: 6px;}
+.store .mui-active{border: 1px solid #DB0000;}
+/*我的订单*/
+.order-box {background: #fff;margin-bottom: 20px;}
+.order-box .tit{padding: 10px 15px;color: #666;margin-bottom: 0;}
+.order-box-btn{overflow: hidden;line-height: 54px;padding: 0 15px;}
+.order-box-btn .mui-btn{margin: 10px 0 10px 10px;}
+.mui-slider.booklist .mui-slider-group{border: none;}
+.mui-slider.booklist .mui-slider-group .mui-slider-item.imglist {overflow: hidden;border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;}
+.mui-slider.booklist .mui-slider-group .mui-slider-item.imglist img{width: 30%;float: left;margin:0 5px;}
+.mui-slider.booklist-index .mui-slider-group .mui-slider-item.imglist{border: none;}
+.mui-slider.booklist-index .mui-slider-group .mui-slider-item>a{position: relative;height: 10rem;width: 30%;float: left;margin:0 5px;background: #fff;padding: 5px;}/*wendy 改图书比例正方形*/
+.mui-slider.booklist-index .mui-slider-group .mui-slider-item>a img{width: 100%;float: left;}
+.mui-slider.booklist-index .mui-slider-group .mui-slider-item>a p{position: absolute;bottom: 1.5rem;height: 2rem;line-height: 1rem;overflow: hidden;}
+.mui-slider.booklist-index .mui-slider-group .mui-slider-item>a span{position: absolute;bottom: 0.5rem;line-height: 1rem;height: 1rem;display: block;color: #aaa;}
+.remove{position: absolute;top: 10px;right: 10px;}
+.mui-checkbox.mui-left label, .mui-radio.mui-left label{padding-right: 35px;padding-left: 48px;}
+/*我的购物车*/
+.buy-input{width: 152px;height: 26px;position: absolute;}
+.buy-input input,
+.buy-input button{width: 24px;height: 24px;padding: 0;text-align: center;background: #fff;border:none;color: #9B9B9B;}
+.buy-input input{border: 1px solid #ccc;color: #DB0000;width: 100px;}
+.mui-media-body .remove{top:44%;z-index: 1111;}
+
+.order-oper-btn {float: right; height: 34px;}
+.footer-fixed {
+    position: fixed;
+    right: 14px;
+    bottom: 54px;
+    width: 40%;
+    min-width: 260px;
+    z-index: 999;
+}
+.total-pay {
+    float:right;
+    width:40%;
+}
+.total-price {
+    float: right;
+    width: 60%;
+    min-width: 130px;
+    height: 34px;
+    text-align: center;
+    line-height: 34px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+/*订单确认*/
+.sum-price .mui-input-row label{width: 65%;text-align: right;}
+.sum-price .mui-input-row span{width: 30%;text-align: right;}
+.sum-day .mui-input-row label{width: 45%;}
+.sum-day .mui-input-row span{width: 55%;}
+.radio-other{padding-left: 28px;}
+/*商品详细页*/
+.book-detail .con{padding: 10px 20px;font-size: 14px;}
+.book-detail .title{border: 4px solid #fff;}
+.book-nav{background: #fff;text-align: center;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow:0 1px 1px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.1);}
+.book-nav a{display: inline-block;width: 45%;padding: 10px 0;border-top: 1px dashed #ccc;margin-bottom: -1px;}
+.book-nav a.on{background: url(../img/bg-arrow-top.png) center bottom no-repeat;}
+.mui-table-view.book-view:after{background: none;}
+.price .date{font-size: 10px;float: right;}
+
+.mui-btn.add{width: 40%;margin: 20px 20px 0 0; float: right;background: #D8D8D8;}
+.mui-btn.add .mui-icon{font-size: 20px;font-weight: bold;}
+.sum-con{padding: 10px;}
+
+/*底部导航*/
+nav.mui-bar{background: #ffffff;border-top: 1px solid #CCCCCC;border-bottom: 1px solid #CCCCCC; }
+nav.mui-bar-tab .mui-tab-item1{display: table-cell;overflow: hidden;width: 1%;height: 50px;text-align: center;vertical-align: middle;white-space: nowrap;text-overflow: ellipsis;padding-bottom: 2px;color: #737A84;padding-top: 4px;}
+nav.mui-bar-tab .mui-tab-item1.mui-active{color: #DB0000;}
+nav.mui-bar-tab .mui-tab-item1 .mui-icon{top: 3px;width: 24px;height: 24px;padding-top: 0;padding-bottom: 0;}
+nav.mui-bar-tab .mui-tab-item1 .mui-icon ~ .mui-tab-label{font-size: 11px;display: block;overflow: hidden;text-overflow: ellipsis;}
+/*仿weixin底部代二级导航栏*/
+#weixin-menu{position:fixed;bottom:0px;width:100%;height:54px;line-height:16px;z-index:999;background: #ffffff;border-top: 1px solid #CCCCCC;}
+#weixin-menu ul{margin:0 auto;list-style-type:none;width:100%;max-width:500px;height:100%;padding: 0;}
+#weixin-menu ul li{float:left;width:33.3%;height:100%;text-align:center;position:relative;font-size:14px;}
+#weixin-menu ul li .line{position:absolute;top:0px;right:0px;z-index:30;}
+#weixin-menu ul li .menu_li{position:absolute;top:0px;left:0px;z-index:20;width:100%;height:100%;color:#454545;background: #ffffff;}
+#weixin-menu ul li .menu_li.on {color: #DB0000;}
+#weixin-menu ul li .menu_li img{margin-top: 8px;}
+#weixin-menu ul li .img_front{position:absolute;top:0px;left:0px;z-index:30;width:100%;height:100%;}
+#weixin-menu ul li .img_front img{width:100%;height:100%;}
+#weixin-menu ul li span{position:absolute;bottom:-300px;left:50%;width:104px;margin-left:-52px;margin-bottom:14px;height:auto;text-align:center;z-index:10;}
+#weixin-menu ul li span div{position:absolute;top:0px;left:0px;}
+#weixin-menu ul li span a{float:left;width:100%;height:43px;line-height:43px;color:#454545;text-decoration:none;}
+
+.footer_front{position:fixed;width:100%;height:100%;top:0px;left:0px;z-index:888;display:none;}
+
+/*返回顶部*/
+.gotop {
+    position: fixed;
+    bottom: 60px;
+    right: 11px;
+    z-index: 500;
+    width: 30px;
+    height: 30px;
+    display: none;
+}
+.w_top {
+    width: 30px;
+    height: 30px;
+}
+.w_top img {
+    width: 30px;
+}
+
+
+/*上拉加载样式*/
+.outer{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction:column;
+    -webkit-box-orient:vertical;
+    box-orient:vertical;
+    -webkit-flex-direction:column;
+    flex-direction:column;
+}
+
+.inner{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    background-color: #fff;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
+}
+/*表单提示*/
+#prompt-req-summary{margin: 0 20px;}
+#prompt-req-summary div.inline{display: block;text-align: center}
+
+
+/*数据加载提示*/
+.remind{clear:both;height:40px;line-height:40px;background:#FFF;border-bottom:1px solid #CCC;text-align: center;display: none;}
+
+/*加条形码*/
+.mui-input-row.barcode{padding: 16px 10px 10px 10px;}
+
+/*new会员中心*/
+.user-hd, .user-card {
+    position: relative;
+}
+
+.user-hd .userimg {
+    position: absolute;
+    top: 44px;
+    width: 100%;
+    text-align: center;
+}
+
+.user-hd .userimg img {
+    border-radius: 50%;
+}
+
+.user-hd .user-tab {
+    position: absolute;
+    bottom: 4px;
+}
+
+.user-hd .user-tab .mui-tab-label {
+    color: #fff;
+}
+
+.user-hd .user-tab .mui-tab-item1 {
+    border-right: 1px solid #fff;
+}
+
+.user-hd .user-tab .mui-tab-item1:last-child {
+    border: none;
+}
+
+.user-index {
+    overflow: hidden;
+}
+
+.user-index img {
+    float: left;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.user-card label {
+    position: absolute;
+    top: 20px;
+    text-align: center;
+    width: 100%;
+    font-size: 20px;
+}
+/*wendy 改图书比例正方形*/
+@media (min-width: 360px)
+{
+    .mui-slider.booklist-index .mui-slider-group .mui-slider-item>a{height: 11rem;}
+    .mui-table-view .mui-media-object {line-height: 96px;max-width: 96px;height: 96px;}
+    .mui-table-view .fav {min-height: 96px;}
+
+    .user-hd .user-tab {
+        bottom: 8px;
+    }
+}
+@media (min-width: 400px)
+{
+    .mui-slider.booklist-index .mui-slider-group .mui-slider-item>a{height: 12rem;}
+
+    .user-hd .user-tab {
+        bottom: 10px;
+    }
+}
+
+/*购物车*/
+.mui-checkbox input[type=checkbox].buy-checkbox {
+    position: absolute;
+    top: 38%;
+    left: 3px;
+}
+
+/*详细页*/
+.mui-btn.w40, button.w40 {
+    width: 38%;
+}
+
+.mui-btn.shoucang {
+    margin-right: 10px;
+    font-size: 0.6rem;
+    line-height: 10px;
+    padding: 0px 12px;
+}
+
+.mui-btn.shoucang img {
+    margin-top: -4px;
+}
+
+.mui-btn.shoucang.select {
+    border-color: #DB0000;
+}
+
+.number {
+    display: block;
+    top: 4px;
+    right: 20px;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    font-style: normal;
+    font-size: 0.6rem;
+    line-height: 20px;
+    color: #fff;
+    background: #DB0000;
+    border-radius: 10px;
+}
+
+.my-number {
+    position: relative;
+    top: -20px;
+    display:inline-block;
+    width: 20px;
+    height: 20px;
+    font-style: normal;
+    font-size: 0.6rem;
+    color: #DB0000;
+    background: #fff;
+    border:1px solid #DB0000;
+    border-radius: 20px;
+}
+
+/*提交订单*/
+.mui-btn-block.mui-btn-grey {
+    background: #ccc;
+}
+
+/*优惠券*/
+.youhuiquan {
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.youhuiquan span {
+    position: absolute;
+    color: #fff;
+}
+
+.youhuiquan span.date {
+    bottom: 5%;
+    left: 4%;
+    font-size: 0.6rem;
+}
+
+.youhuiquan span.num {
+    top: 10%;
+    left: 34%;
+}
+
+.youhuiquan span.money {
+    bottom: 34%;
+    left: 10%;
+    font-size: 1.6rem;
+}
+
+.youhuiquan span.money em {
+    font-size: 4rem;
+    font-style: normal;
+}
+
+.youhuiquan span.use {
+    color: #DB0000;
+    top: 8%;
+    right: 8%;
+    width: 8%;
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+}
+
+.from {
+    padding-bottom: 10px;
+}
+
+/*首页图书滑动修改js版本*/
+.booklist-index .swiper a{background: #fff;margin: 0 0.2rem;display: block;}
+.booklist-index .swiper a .img{max-width: 100%;height: 0;padding-bottom: 130%;background-color:#ffffff;overflow: hidden;}
+.booklist-index .swiper a img{width: 100%;}
+.booklist-index .swiper a p{line-height: 1rem;overflow: hidden;padding: 0.2rem;height: 2.2rem;}
+.booklist-index .swiper a span{line-height: 1rem;color: #aaa;}

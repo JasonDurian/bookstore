@@ -1,0 +1,118 @@
+<tc_include file="Public:bookhead" />
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+	<h2>我的收藏</h2>
+	<hr />
+</header>
+<div class="mui-content bgw">
+	<ul class="mui-table-view lists">
+    <foreach name='books' item='vo'>
+        <li class="mui-table-view-cell mui-media">
+        	<div class="mui-slider-right mui-disabled">
+                <a class="mui-btn mui-btn-red" onclick="deleteFav(this,{$vo['goods_id']})">删除</a>
+            </div>
+            <div class="mui-slider-handle">
+	            <a href="{:leuu('Detail/index',array('id'=>$vo['goods_id']))}">
+	                <img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+	                <div class="mui-media-body">
+						{$vo['name']}
+						<p class="price">
+							价格：<span class="delete">{$vo['pre_price']}</span> <span class="red">{$vo['now_price']}</span>
+							[<span>
+							<php>$discount=round(($vo['now_price']/$vo['pre_price']*10),1);echo $discount;</php>
+							</span>折]
+						</p>
+					</div>
+	            </a>
+            </div>
+        </li>
+    </foreach>                     
+    </ul>
+<div class="mui-text-center mt20" id="remind"></div>
+</div>
+
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+    var moredata=1;
+    var page_num=1;
+    var ajax_url="{:leuu('Member/getLimit')}";
+    $(window).scroll(function(){
+        var total_height = document.body.scrollHeight;
+        var scrollTop = document.body.scrollTop;
+        var window_height = window.innerHeight;
+        if(total_height == (scrollTop +window_height) && moredata==1){
+            page_num++;
+            $.post(ajax_url,{page:page_num,},function(data){
+            	if(data.result!=''){
+                     $("#remind").html('正在努力加载…');
+                     $("#remind").show();
+                     var htmllist=eval(data.result);
+                     var htmlstr='';
+                     $.each(htmllist,function(k,v){
+                         var title = v.name;
+                         var zk = (v.now_price / v.pre_price * 10).toFixed(1);
+                         //var price_zk = v.discount_price_1 <= 0 ? (v.price * 0.75).toFixed(1) : v.discount_price_1;
+                         var cover = (v.cover.indexOf('http') === 0) || (v.cover.indexOf('/') === 0) ? v.cover : ('{:sp_get_asset_upload_path()}' + v.cover);
+
+                         htmlstr+='<li class="mui-table-view-cell mui-media">'+
+                      		 '<div class="mui-slider-right mui-disabled">'+
+                      		 '<a class="mui-btn mui-btn-red" onclick="deleteFav(this,'+v.goods_id+')">删除</a></div>'+
+                      		 '<div class="mui-slider-handle">'+
+                             '<a href="{:leuu('Detail/index')}&id='+v.goods_id+'">'+
+                             '<img class="mui-media-object mui-pull-left" src="'+cover+'">'+
+                             '<div class="mui-media-body">'+title+
+                             '<p class="price">价格：<span class="delete">￥'+ v.pre_price+'</span> <span class="red">￥'+v.now_price+'</span> ['+zk+'折]</p>'+
+                             '</div></a></div></li>';
+                     });
+                     // 为了测试，延迟1秒加载
+                     setTimeout(function(){
+                         $(".lists").append(htmlstr);
+                     },1000);
+
+                 }else{
+                     $("#remind").html('数据已经全部加载了哦！ ^_^');
+                     $("#remind").show();
+                     moredata=0;
+                     return;
+                 }
+             });
+         }
+     });
+    
+   /**
+    * 删除物品
+    */
+    //$('.mui-btn-red').on('tap', function() {
+    function deleteFav(obj,goods_id) {
+        //用到mui的内置方法，似乎只能用原生js代码
+        var li = obj.parentNode.parentNode;
+        //var myLocation = $(this);
+        //var goods_id = $(this).parent().children('.goods_id').val();
+        mui.confirm('确认删除？', '叮当书店', function(e) {
+            if (e.index == 0) {
+                setTimeout(function() {
+                    mui.swipeoutClose(li);        //mui内置方法
+                }, 0);
+            }else {
+            	$.ajax({
+                    type: "post",
+                    url: "{:leuu('Member/deleteFav')}",
+                    data: {product_id:goods_id},
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.status) {
+                            li.parentNode.removeChild(li); 
+                        }else {
+                        	mui.toast(data.info);
+                        }   
+                    }
+                });
+            }
+        });
+    };
+   
+ </script>
+</body>
+</html>

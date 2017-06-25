@@ -1,0 +1,126 @@
+<tc_include file="Public:bookhead" />
+<style>
+/*调试模式关闭后，可以把样式都放到app.css里进行调用*/
+#userAvatar {
+    display:inline-block;
+    margin:5px auto;
+    width:100px;
+    height:100px;
+    border-radius:100px;
+    border:2px solid #fff;
+    overflow:hidden;
+    -webkit-box-shadow:0 0 3px #ccc;
+    box-shadow:0 0 3px #ccc;
+}
+#userAvatar > img {
+	width:100%;
+	min-height:100%;
+}
+#myOrder {padding-top:2%;}
+#myTable {
+    height:auto !important;
+    min-height:300px; /*假定最低高度是300px*/
+}
+.myNumber {
+    background: #fff;
+    font-size: 0.6rem;
+    color: #DB0000;
+    border:1px solid #DB0000;
+    border-radius: 20px;
+    display:inline-block;
+    width: 20px;
+    height: 20px;
+    font-style: normal;
+    position: relative;
+    top: -20px;
+}
+.myTableview {
+    width: 50%;
+    border: 1px solid #ccc;
+}
+</style>
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+  <div style="background:url({:sp_get_asset_upload_path('image/userBgimg.jpg')});" >
+  	<div class="user-avatar" style="width: 100px; height: 100px;">
+	  <img src="{:sp_get_asset_upload_path($useravatar)}">
+	</div>
+	<a href="{:leuu('Member/editMember')}">
+	  <img alt="编辑" src="{:sp_get_asset_upload_path('img/edit.png')}">
+	</a>
+	<p>{:$username}</p>
+  </div>
+</header>
+<div class="mui-content bgw">
+	<div id="myOrder">
+	<div class="form-tit mt20" id="allOrder">
+		我的订单<span class="mui-icon mui-icon-arrowright fr"></span>
+	</div>
+	<hr />
+	<nav class="mui-text-center menu-bar">
+		<a href="{:leuu('Member/waitpayment')}"><img src="{:sp_get_asset_upload_path('img/waitpayment.png')}"/><em class="orderList">{$wait['payment']}</em><p>待付款</p></a>
+		<a href="{:leuu('Member/waitdelivery')}"><img src="{:sp_get_asset_upload_path('img/waitdelivery.png')}"/><em class="orderList">{$wait['delivery']}</em><p>待发货</p></a>
+		<a href="{:leuu('Member/waitgoods')}"><img src="{:sp_get_asset_upload_path('img/waitgoods.png')}"/><em class="orderList">{$wait['goods']}</em><p>待收货</p></a>
+		<a href="{:leuu('Member/waitcomment')}"><img src="{:sp_get_asset_upload_path('img/waitcomment.png')}"/><em class="orderList">{$wait['comment']}</em><p>待评价</p></a>
+	</nav>
+	</div>
+	<div id="myTable">
+	<div class="myTableview mui-text-center fl">
+		<ul class="mui-table-view">
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="{:leuu('Member/editMember')}">
+		            <img class="mui-media-object" src="{:sp_get_asset_upload_path('img/member.png')}">
+		            <p>个人信息</p>
+		        </a>
+		    </li>
+		    
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="{:leuu('Member/MemberCenter')}">
+		            <img class="mui-media-object" src="{:sp_get_asset_upload_path('img/vip.png')}">
+		            <p>会员中心</p>
+		        </a>
+		    </li>
+	    </ul>
+    </div>
+    
+    <div class="myTableview mui-text-center fl">
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell mui-media">
+		        <a href="{:leuu('Member/favorite')}">
+		            <img class="mui-media-object" src="{:sp_get_asset_upload_path('img/favorite.png')}">
+		            <p>我的收藏</p>
+		        </a>
+		    </li>
+		    
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="{:leuu('Member/borrow')}">
+		            <img class="mui-media-object" src="{:sp_get_asset_upload_path('img/borrow.png')}">
+		            <p>我的借阅</p>
+		        </a>
+		    </li>
+	    </ul>
+    </div>
+    </div>
+		
+	
+</div>
+
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+$('#allOrder').click(function() {
+	var url = "{:leuu('Member/order')}";
+	document.location.href = url;
+});
+
+$('em.orderList').each(function(i) {
+	if(($(this).html())!=0) {
+		$(this).attr("class","myNumber");
+	} else {
+		$(this).html('');
+	}
+});
+</script>
+</body>
+</html>

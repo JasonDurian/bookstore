@@ -1,0 +1,151 @@
+<tc_include file="Public:bookhead" />
+<style>
+    nav.menu-bar a{width: 20%; float: left;}
+</style>
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+	<h2>我的订单</h2>
+	<hr />
+</header>
+<div class="mui-content bgw">
+<header class="mui-text-center">
+	<nav class="menu-bar order-nav">
+		<a href="{:leuu('Member/order')}"><p>全部订单</p></a>
+		<a href="{:leuu('Member/waitpayment')}"><p>待付款</p></a>
+		<a href="{:leuu('Member/waitdelivery')}"><p>待发货</p></a>
+		<a href="{:leuu('Member/waitgoods')}"><p>待收货</p></a>
+		<a href="{:leuu('Member/waitcomment')}"><p>待评价</p></a>
+	</nav>
+</header>
+<div class="lists">
+<foreach name='allOrder' item='all' key='k'>
+<ul class="mui-table-view">
+<a href="{:leuu('Shopping/orderDetail',array('orderID'=>$all['order_id']))}">
+	<li class="mui-table-view-cell">
+	<hr />
+	单号：<span class="orderSN">{$all['order_sn']}</span>
+	<span class="mui-icon mui-icon-arrowright fr"></span>
+	<span class="orderStatus red fr">
+	    {$all['statusTip1']}
+	</span>
+	</li>
+  <foreach name='books[$k]' item='vo'>
+	<li class="mui-table-view-cell">
+		<img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+		<div class="mui-media-body">
+			{$vo['name']}
+			<p class="price">
+			价格：<span class="now_price">￥{$vo['now_price']}</span><br />
+			数量：x<span class="goodsNUM">{$vo['num']}</span>
+			</p>
+		</div>
+	</li>
+  </foreach>
+	<li class="mui-table-view-cell">
+	<span class="fr">总计：￥{$all['total_price']}</span>
+	</li>
+</a>
+	<li class="mui-table-view-cell">
+	    {$all['statusTip2']}
+	    {$all['statusTip3']}
+	</li>
+</ul>
+</foreach>
+</div>
+<div class="mui-text-center mt20" id="remind"></div>
+</div>
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+    /*
+     * 订单操作
+     */
+	function orderOperation(order_id,orderStatus) {
+	    var payStatus = 0;
+        switch(orderStatus) {
+        	case 1: {
+        	    var result = confirm("确认付款？");
+                if(result) {
+                    payStatus = 2;          //已付款，待发货
+                }
+        	}break;
+        	case 2: {
+                mui.toast('提醒成功');
+            }break;
+            case 3: {
+                payStatus = 4;
+                mui.toast("收货成功");
+            }break;
+            case 4: {
+                var url = "{:leuu('Shopping/releaseComm')}&orderID=" + order_id;
+                document.location.href = url;
+            }break;
+        	default:break;
+        }
+        operation(payStatus,order_id);
+    }
+	
+	/*
+	 * 异步更新订单状态
+	 */
+	function operation(payStatus,order_id) {
+	    if(payStatus != 0) {
+	        $.ajax({
+                type: "post",
+                url: "{:leuu('Shopping/updateStatus')}",
+                data: {myStatus:payStatus,orderID:order_id},
+                dataType: "json",
+                success: function(str) {
+                    switch(str.result) {
+                    case 1: {
+                        window.location.reload();
+                    } break;
+                    case -1: {
+                        alert("操作失败");
+                    } break;
+                    default:break;
+                    }
+                }
+            });
+	    }
+    }
+	
+	/*
+	 * 待付款页面取消订单
+	 */
+	function orderCancel(order_id) {
+        var result = confirm("确认取消？");
+        if(result) {
+            operation(6,order_id);
+        }
+    }
+	
+	/*
+	 * 删除失效或已完成订单
+	 */
+	function orderDelete(order_id,k) {
+        var result = confirm("确定删除？");
+        if(result) {
+            $.ajax({
+                type: "post",
+                url: "{:U('Shopping/deleteOrder')}",
+                data: {orderID:order_id},
+                dataType: "json",
+                success: function(str) {
+                    switch(str.result) {
+                    case 1: {
+                        mui.toast('删除成功');
+                        $('ul').eq(k).html('');                 //不刷新页面是为了让订单页面保持在当前位置
+                    } break;
+                    case -1: {
+                        alert("操作失败");
+                    } break;
+                    default:break;
+                    }
+                }
+            });
+        }
+    }
+	
+</script>

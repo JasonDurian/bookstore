@@ -1,0 +1,87 @@
+<tc_include file="Public:bookhead" />
+<link href="__TMPL__Public/assets/css/swiperSlide/mui.picker.css" rel="stylesheet" />
+<link href="__TMPL__Public/assets/css/swiperSlide/mui.poppicker.css" rel="stylesheet" />
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+   <h2>编辑收货地址</h2>
+</header>
+<div class="mui-content bgw">
+   <form class="mui-input-group" action="{:leuu('Member/modifyAddress',array('addrID'=>$addr_id))}" method="post" autocomplete="on">
+        <div class="mui-button-row">
+            <button class="mui-btn fr mr10 bgw" type="submit">保存</button>
+        </div>
+        <div class="mui-input-row">
+            <label>收货人</label>
+            <input type="text" name="contact" placeholder="请输入收货人姓名" value="{$contact}"/>
+        </div>
+        <div class="mui-input-row">
+            <label>联系电话</label>
+            <input type="number" class="mui-input-clear" name="mobile" placeholder="请输入联系电话" value="{$mobile}" />
+        </div>
+        <div class="mui-input-row">
+            <label>所在地区</label>
+            <input type="text" id='showCityPicker' name="region" placeholder="选择所在地区..." value="{$province}-{$city}-{$district}" onfocus=this.blur() autocomplete="off"/>
+        </div>
+        <div class="mui-input-row">
+            <label>详细地址</label>
+            <textarea name="address" rows="3" cols="20">{$address}</textarea>
+        </div>
+        
+        <div class="mui-button-row">
+            <button id="deleteAddress" type="button" class="mui-btn red" >删除地址</button>
+        </div>
+   </form>
+</div>
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script src="__TMPL__Public/assets/js/swiperSlide/mui.picker.js"></script>
+<script src="__TMPL__Public/assets/js/swiperSlide/mui.poppicker.js"></script>
+<script src="__TMPL__Public/assets/js/swiperSlide/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    (function($, doc) {
+        var cityPicker = new $.PopPicker({
+            layer: 3
+        });
+        cityPicker.setData(cityData3);
+        var showCityPickerText = doc.getElementById('showCityPicker');
+        showCityPickerText.addEventListener('tap', function(event) {
+            cityPicker.show(function(items) {
+                var str = (items[0] || {}).text + "-" + (items[1] || {}).text + "-" + (items[2] || {}).text;
+                showCityPickerText.value = str;
+                //返回 false 可以阻止选择框的关闭
+                //return false;
+            });
+        }, false);
+    })(mui, document);
+    
+   /**
+    * 删除收货地址
+    */
+	$('#deleteAddress').on('click', function() {
+		var addrID = "{$addr_id}";
+		if(confirm('确认删除？')) {
+			$.ajax({
+				type: "post",
+				url: "{:leuu('Member/deleteAddress')}",
+				data: {addr_id:addrID},
+				dataType: "json",
+				success: function(str) {
+					switch(str.result) {
+					case 1: {
+						mui.toast("删除成功");
+						document.location.href = "{:leuu('Member/manageAddress')}";
+						//window.history.go(-1);
+					} break;
+					case -1: {
+						mui.toast("操作失败");
+					} break;
+					default:break;
+					}
+				}
+			});
+		}
+	});
+</script>
+</body>
+</html>

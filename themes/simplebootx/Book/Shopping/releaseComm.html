@@ -1,0 +1,59 @@
+<tc_include file="Public:bookhead" />
+<style>
+.mar-bottom {margin-bottom: 54px}
+#footerFix {
+	position: fixed; 
+	bottom: 34px; 
+	right: 14px; 
+	width:100%
+}
+</style>
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+	<p class="oper_header">发表评价</p>
+</header>
+<div class="mui-content bgw">
+  <form action="{:leuu('Shopping/saveComm')}" method="post">
+	  <ul class="mui-table-view mar-bottom">
+	  <foreach name="books" item="vo">
+		<li class="mui-table-view-cell">
+			<img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+			<div class="mui-media-body">
+				<textarea placeholder="请在此发表您的看法" style="min-height:90px;" name="content[]" autofocus></textarea>
+			</div>
+			<div>
+				<div class="fl">综合评分：</div>
+				<div class="star fl" data-score="5"></div>
+				<input type="hidden" name="goods_id[]" value="{$vo['goods_id']}" >
+				<input type="hidden" name="order_id" value="{$vo['order_id']}" >
+			</div>
+		</li>
+	  </foreach>
+	  </ul>
+	  <div id="footerFix">
+        <div class="mui-input-row mui-checkbox mui-left fl">
+            <label>匿名评论</label>
+            <input type="checkbox" name="type" checked >
+        </div>
+        <button class="white fr">提交评论</button>
+      </div>
+  </form>	
+</div>
+
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script src="__TMPL__Public/assets/js/swiperSlide/jquery.raty.min.js"></script>
+<script>
+	$(function() {
+	    $.fn.raty.defaults.path = '__TMPL__Public/assets/images/swiperSlide';
+		$('.star').raty({
+		    score: function() {
+		    	return $(this).attr('data-score');
+		  	},
+		  	scoreName: 'score[]'
+		});
+	});
+</script>
+</body>
+</html>

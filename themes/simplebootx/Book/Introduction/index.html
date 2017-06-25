@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>叮当B2C建站|微信建站</title>
+    <meta name="keywords" content="网站模板,企业网站模板,网站模板下载,网页模板">
+    <meta name="description" content="叮当建站,B2C商城网站模板,电脑网站+手机网站+微信网站,助中小企业自建模板网站,简化建站流程,极速建站">
+    <meta name="author" content="深圳明之阳听阅文化发展有限公司">
+    <meta name="copyright" content="深圳明之阳听阅文化发展有限公司版权所有">
+    <style type="text/css">
+        /*html { overflow:hidden;}*/
+        body { height:100%; margin:0px; padding:0px; font-family:'微软雅黑',Arial; color:#333; /*overflow:hidden;*/}
+        #contentDiv { position:absolute; top:0; left:0; bottom:0; right:0; height:auto; min-height:0;/* overflow-x:auto; overflow-y:scroll; *height:expression(document.documentElement.clientHeight); *width:expression(document.documentElement.clientWidth);*/}
+        /*.col1 {color:#333;}*/
+
+        .anniu,.anniu:visited{ display:block;width:242px; height:50px; /*padding-top: 226px;*/background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -19px -3px no-repeat;margin: 0px auto 0px auto;}
+        .anniu:hover {display:block;width:242px; height:50px; background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -19px -55px no-repeat; }
+
+        .btn { display:block; width:160px; height:46px; line-height:46px; text-align:center; font-size:22px; color:#fff; background:#3baa24; text-decoration:none;}
+        .btn:hover { background:#45b72a;}
+
+        #btn1{display:block; width:220px; height:42px;background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -113px no-repeat;margin-left:0px!important;}
+        #btn1:hover{display:block; width:220px; height:42px;background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -155px no-repeat;}
+
+        #btn2{display:block; width:192px; height:44px;background:url(http://jz.faisys.com/image/pro8/button.png) 0px -196px no-repeat;margin-left:0px!important;  top:314px;position:absolute;}
+        #btn2:hover{background:url(http://jz.faisys.com/image/pro8/button.png) 0px -240px no-repeat;}
+
+        #btn3{display:block; width:220px; height:42px; background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -213px no-repeat; margin: 0 auto;}
+        #btn3:hover{display:block; width:220px; height:42px;background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -255px no-repeat;}
+
+        #btn4{display:block; width:220px; height:42px;background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -311px no-repeat; margin: 0 auto;}
+        #btn4:hover{background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -353px no-repeat;}
+
+        #btn9{display:block; width:220px; height:42px;background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -113px no-repeat;margin: 0 auto;}
+        #btn9:hover{background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -155px no-repeat;}
+
+        #btn5{display:block; width:220px; height:42px;background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -29px -412px no-repeat;margin: 0 auto;}
+        #btn5:hover{background:url({:sp_get_asset_upload_path('image/btn.jpg')}) -30px -455px no-repeat;}
+        
+        #imgWithTitle{float: right; margin-right:50px; text-align:center;}
+        #qrcode{width: 200px; height: 200px; }
+
+        .fixhead {position:fixed; top:0; left:0; right:16px; height:80px; border-bottom:1px solid #e2e2e2; background:url(http://jz.faisys.com/image/pro6/tg_01.png) 50% 0 #fff no-repeat; display:none; }
+        .fixhead .ct {width:960px; height:80px;  background:url(http://jz.faisys.com/image/pro6/tg_01-0601.png) 0 -100px no-repeat; margin:auto;}
+        .fixhead .ct a {width:238px; height:62px;  background:url(http://jz.faisys.com/image/pro6/tg_01-0601.png) #f1f3f4 0 -200px no-repeat; display:block; margin-top:9px; float:right; z-index:100;}
+        .fixhead .ct a:hover {background:url(http://jz.faisys.com/image/pro6/tg_01-0601.png) #f1f3f4 0 -280px no-repeat;}
+        /*.z_head { height:84px; background:url(http://jz.faisys.com/image/pro6/index_01.jpg) center #0d3966 no-repeat;}*/
+        .z_head { height:84px; background:url({:sp_get_asset_upload_path('image/bannerPro.jpg')}) center #0d3966 no-repeat;}
+
+        .zw_0 { height:675px; background:url({:sp_get_asset_upload_path('image/introIndex_01.jpg')}) center center no-repeat; padding:0;}
+        .zw_0 .z_ct {width:100%; height:400px;  margin:auto;padding-top: 226px;}
+        .zw_0 .z_ct .ct_left {width:246px; height:675px;position:relative}
+
+        /*横幅*/
+        .zw_0 .z_ct .ct_right .bnr { position:absolute; top:22px; left:21px; width:439px; height:247px;}
+        .zw_0 .z_ct .ct_right #bnr1 { background:url(http://jz.faisys.com/image/pro6/bnr.jpg) 0 0 no-repeat;}
+        .zw_0 .z_ct .ct_right #bnr2 { display:none; background:url(http://jz.faisys.com/image/pro6/bnr.jpg) 0 -247px no-repeat;}
+        .zw_0 .z_ct .ct_right #bnr3 { display:none; background:url(http://jz.faisys.com/image/pro6/bnr.jpg) 0 -494px no-repeat;}
+
+        .zhuce .zhanghao {font-size:22px;height:19px; line-height:19px; font-family:"微软雅黑";color: #4E4D4D; text-align: center;margin:160px 0 0 0;}
+        .zhuce .mianfei1 {font-size:16px;height:20px; line-height:20px; font-family:"微软雅黑";color: #686767; text-align: center; margin:24px 0 0 0;}
+        .zhuce .mianfei2 {font-size:16px;height:20px; line-height:20px; font-family:"微软雅黑";color: #686767; text-align: center;margin:0 0 49px 0;}
+
+        .xuanze .muban {font-size:22px;height:19px; line-height:19px; font-family:"微软雅黑";color: #4E4D4D; text-align: center;margin:160px 0 0 0;}
+        .xuanze .quanmian1 {font-size:16px;height:20px; line-height:20px; font-family:"微软雅黑";color: #686767; text-align: center; margin:24px 0 0 0;}
+        .xuanze .quanmian2 {font-size:16px;height:20px; line-height:20px; font-family:"微软雅黑";color: #686767; text-align: center;margin:0 0 49px 0;}
+
+        .sheng .wang {font-size:22px;height:19px; line-height:19px; font-family:"微软雅黑";color: #4E4D4D; text-align: center;margin:160px 0 0 0;}
+        .sheng .ziyou1 {font-size:16px;height:20px; line-height:20px; font-family:"微软雅黑";color: #686767; text-align: center; margin:24px 0 0 0;}
+        .sheng .ziyou2 {font-size:16px;height:20px; line-height:20px; font-family:"微软雅黑";color: #686767; text-align: center;margin:0 0 49px 0;}
+
+
+        .lan1 { height:748px;}
+        .lan1 .l_ct {padding-left: 40px;width:1000px; height:288px; padding-top:410px;padding-left: 150px;/*position:relative;*/}
+        .lan1 .l_ct .nr {width:312px; height:105px; margin-top:192px;}
+
+        .lan1 .l_ct .tx_ct { height:300px; padding-left:100px; font-size:14px; line-height:24px; color:#777;}
+        .lan1 .l_ct .tx_ct .tr1 {font-size:28px; height:65px; display:block; padding-top:60px; color:#333;}
+        .lan1 .l_ct .tx_ct .tr2 {font-size:18px; height:42px; display:block; color:#000;}
+
+        .lan_end{ height:650px; text-align:center; background:#f5f5f5;}
+        .lan_end .tr1 {font-size:36px; height:60px; padding-top:35px; color:#000;}
+        .lan_end .tr2 {font-size:18px; height:55px; color:#777;}
+        .lan_end .tr3 { height:958px; background:url(http://jz.faisys.com/image/pro6/index_15.jpg) center no-repeat;}
+        .lan2 { height:500px;}
+
+        .footer{width: 100%; height: 120px;font-size: 14px;line-height: 60px;color: #aaa;text-align: center;}
+        .icon_beian{display: inline-block; width: 20px;height: 20px; margin: 0px 2px;color: #aaa;}
+        .wangxinImg{display:inline-block; margin:0px 0px 0px 20px;width: 84px; height: 31px;background:url(http://jz.faisys.com/image/iTrust.jpg) 0px 0px no-repeat;}
+        .footCenter a{text-decoration: none; cursor: pointer;font-size: 14px; line-height: 60px ; color: #aaa;}
+        .footer a:hover,.footer a:visited,.footer a:active{ color: #aaa;}
+
+
+        .light{ width:100%; height:60px; background: url(http://jz.faisys.com/image/pro6/light.jpg) center no-repeat;}
+        .fixLight {
+            position: fixed;
+            z-index:1000;
+            left:0px;
+            top:0px;
+            width:100%;
+            height:60px;
+            background: url(http://jz.faisys.com/image/pro6/light_2.png) center no-repeat;
+            display:none;
+            z-index:100;
+            opacity:0.7;
+            -moz-opacity:0.7;
+            filter:alpha(opacity=70);
+            _position:absolute;
+            _left:expression(eval(document.documentElement.scrollLeft));
+            _top:expression(eval(document.documentElement.scrollTop));
+        }
+
+        .fixLight:hover{background: url(http://jz.faisys.com/image/pro6/light.jpg) center no-repeat;opacity:1;-moz-opacity:1;filter:alpha(opacity=100);}
+
+        /* 修正IE6振动bug */
+        *body{_background-image:url(about:blank);_background-attachment:fixed}
+
+        /*seo blog */
+        .dropDown{width: 530px; margin:0px auto; padding-top: 315px; padding-bottom: 20px; position: relative;}
+        .icon_Down{width: 34px; height: 34px; margin: 0 auto 20px auto; background: url(http://jz.faisys.com/image/iconD.png) 0px 0px no-repeat; cursor: pointer;}
+        .icon_Up{width: 34px; height: 34px; margin: 0 auto 20px auto; background: url(http://jz.faisys.com/image/iconU.png) 0px 0px no-repeat; cursor: pointer;}
+        .item_border_top{border-top: 1px solid #FC7498;border-bottom: 1px solid #FC7498;}
+        .item_border_bottom{border-bottom: 1px solid #FC7498;}
+        .item{display: block; width: 530px;padding: 5px 5px;}
+        .item_tip{display:inline-block; width:250px; color: #FC7498; font-size: 22px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+        .item_tip a{color: #FC7498;}
+        .middle{display: inline-block; width: 2px; height: 30px;border-left:1px solid #FC7498; margin: 0px 9px 0px 5px;}
+        .readMore, .readMore a{font-size: 22px; color:#85B0DD; width: 100%; text-align: center;margin: 15px;}
+        .maskLayer{width: 100%; height: 50px; position: absolute; background: none; top: 310px; }
+    </style>
+</head>
+<body>
+    <div id="contentDiv">
+        <!--头部 -->
+        <div class="z_head"></div>
+
+        <!--首屏 -->
+        <div id="index1" class="zw_0">
+            <div class="z_ct">
+                <div style="clear;both;"></div>
+                <!--<a hidefocus="true" class="anniu" href="http://jz.faisco.com/reg.html">&nbsp;</a>-->
+                <div id="imgWithTitle">
+                    <img id="qrcode" alt="公众号在线咨询" src="{:sp_get_asset_upload_path('image/showqrcode.jpg')}">
+                    <h4 id="qrcodeTitle">公众号在线咨询</h4>
+                </div>
+            </div>
+        </div>
+        
+        <!--更多栏1 -->
+        <div id="index2" class="lan1" style="width:100%; background:url({:sp_get_asset_upload_path('image/introIndex_03.jpg')}) center no-repeat;">
+            <div style="margin:0px auto; width:976px; padding-top:300px; height:300px;">
+                <div class="zhuce" style="background:url({:sp_get_asset_upload_path('image/introIndex_05.jpg')}) no-repeat; width:264px; height:297px; float:left;">
+                    <div class="zhanghao">在线留言</div>
+                    <div class="mianfei1">关注微信公众号，告诉我们您的需求</div>
+                    <div class="mianfei2">即刻拥有属于自己的网站</div>
+                </div>
+                <div style="background:url({:sp_get_asset_upload_path('image/introIndex_06.jpg')}) no-repeat; width:92px; height:297px; float:left;"></div>
+                <div class="xuanze" style="background:url({:sp_get_asset_upload_path('image/introIndex_07.jpg')}) no-repeat; width:264px; height:297px; float:left;">
+                    <div class="muban">选择模板</div>
+                    <div class="quanmian1">B2B2C、O2O、微网站</div>
+                    <div class="quanmian2">量身定制、高效</div>
+                </div>
+                <div style="background:url({:sp_get_asset_upload_path('image/introIndex_08.jpg')}) no-repeat; width:92px; height:297px; float:left;"></div>
+                <div class="sheng" style="background:url({:sp_get_asset_upload_path('image/introIndex_09.jpg')}) no-repeat; width:264px; height:297px; float:left;">
+                    <div class="wang">生成网站</div>
+                    <div class="ziyou1">如有不满意，随时修改</div>
+                    <div class="ziyou2">网站内容</div>
+                </div>
+            </div>
+            <div style="clear;both;"></div>
+            <div style="width: 220px;height: 42px; margin:0px auto; padding-top:44px;">
+                
+                <!--<a hidefocus="true" id="btn1" href="http://jz.faisco.com/reg.html" style="margin-left:90px;"></a>-->
+            </div>
+        </div>
+
+        <!--更多栏3 -->
+        <div id="index4" style="width: 100%;height:750px;background: #fff url({:sp_get_asset_upload_path('image/introIndex_12.jpg')})  center  no-repeat;">
+            <div class="nr" style="width:956px;height:100px;margin:0 auto;padding-top: 608px;">
+                <!--<a hidefocus="true" id="btn3" href="http://jz.faisco.com/reg.html"></a>-->
+            </div>
+        </div>
+
+        <!--更多栏4 -->
+        <div id="index5" class="lan1" style="width: 100%;height:730px;background:url({:sp_get_asset_upload_path('image/introIndex_13.jpg')}) #cee9f4 center  no-repeat;">
+            <div style="width:956px;padding-top:640px;height:50px;margin:0 auto;">
+                <a hidefocus="true" id="btn4" href="{:leuu('Book/Index/index')}"></a>
+            </div>
+        </div>
+
+        <!--<div id="index9" class="lan1" style="width: 100%;height:793px;background:url(http://jz.faisys.com/image/pro6/index_14.jpg?v=201506271842) #cee9f4 center  no-repeat;">-->
+            <!--<div style="width:956px;padding-top:668px;height:50px;margin:0 auto;">-->
+                <!--<a hidefocus="true" id="btn9" href="http://jz.faisco.com/reg.html"></a>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--更多栏底部 -->
+        <div id="index6" class="lan_end" style="width: 100%;height:958px;background:#eee; background-color: rgb(0,43,173); overflow:hidden;">
+            <div class="tr3">
+                <div style="width:300px;padding-top:822px;height:50px;margin:0 auto;">
+                    <!--<a hidefocus="true" id="btn5" href="http://jz.faisco.com/reg.html"></a>-->
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+        </div>
+
+    </div>
+
+    <script>
+
+    </script>
+</body>
+</html>

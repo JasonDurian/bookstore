@@ -1,0 +1,199 @@
+<tc_include file="Public:bookhead" />
+<style>
+.addrl {padding-left:10px;}
+#submitOrder {width: 100%;}
+#cartTable {margin-bottom:54px;}
+</style>
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+	<h2>确认订单</h2>
+</header>
+<div class="mui-content bgw">
+    <form action="{:leuu('Shopping/submitOrder')}" method="post" onsubmit="return form_confirm">
+        <ul class="mui-table-view book-view">
+            <if condition="$defaultAddr['addr_id'] neq null">
+                <li id="selectAddr" class="mui-table-view-cell">
+                    <span class="addrl">{$defaultAddr['contact']}</span>
+                    <span class="mui-icon mui-icon-arrowright fr"></span>
+                    <span class="mui-icon mui-icon-location fl"></span>
+                    <span class="addrr fr">{$defaultAddr['mobile']}</span><br />
+                    <span class="addrl">{$defaultAddr['province']}{$defaultAddr['city']}{$defaultAddr['district']}{$defaultAddr['address']}</span>
+                    <if condition="$defaultAddr['is_default'] eq 1">
+                        <div class="mui-input-row mui-radio mui-left">
+                            <label>默认地址</label><input type='radio' checked>
+                        </div>
+                    </if>
+                    <input name="contact" type="hidden" value="{$defaultAddr['contact']}">
+                    <input name="mobile" type="hidden" value="{$defaultAddr['mobile']}">
+                    <input name="province" type="hidden" value="{$defaultAddr['province']}">
+                    <input name="city" type="hidden" value="{$defaultAddr['city']}">
+                    <input name="district" type="hidden" value="{$defaultAddr['district']}">
+                    <input name="address" type="hidden" value="{$defaultAddr['address']}">
+                </li>
+                <else />
+                    <div class='mui-text-center'><button class='mui-btn red' id='manageAddress' onclick='manageAddr()'>管理收货地址</button></div>
+            </if>
+                
+            <php>$booksPrice = 0.00;</php>
+            <foreach name="books" item="vo">
+            	<if condition="$vo['num'] gt 0">
+	                <li class="booksInformation mui-table-view-cell">
+	                	<img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+	                	<div class="mui-media-body">
+	                		{$vo['name']}
+	                		<p class="price">
+	                		价格：<span class="red">￥</span><span class="now_price red">{$vo['now_price']}</span><span class="delete">&nbsp;￥{$vo['pre_price']}</span><br />	
+	                		数量：x<span class="goodsNUM">{$vo['num']}</span>
+	                		</p>
+	                		<input class="goods-id" name="goods_id[]" type="hidden" value="{$vo['goods_id']}">
+	                		<input name="num[]" type="hidden" value="{$vo['num']}">
+	                		<input name="pre_price[]" type="hidden" value="{$vo['pre_price']}">
+	                		<input name="now_price[]" type="hidden" value="{$vo['now_price']}">
+	                		<php>$booksPrice += ($vo['now_price'] * $vo['num']);</php>
+	                	</div>
+	                </li>
+                </if>
+            </foreach>
+        </ul>	
+      
+        <div id="cartTable" class="mui-input-group">
+            <input name="total_price" type="hidden" value="{$booksPrice}">
+            <input name="status" type="hidden">
+            <div class="mui-input-row">
+                <label>配送方式</label>
+                <select id="expressSel">
+                	<option value="express">快递 免邮</option>
+                	<!--<option value="ownPick">自取</option>-->
+                </select>
+            </div>
+             <div class="mui-input-row">
+                <label>支付方式</label>
+                <select id="paymentSel" name="pay_channel">
+                	<option value="1">微信支付</option>
+                	<option value="2">货到付款</option>
+                </select>
+            </div>
+            <div class="mui-input-row mui-checkbox mui-left">
+                <label for="invoice">是否需要打印发票</label>
+                <input type="checkbox" id="invoice" name="invoice">
+            </div>
+            <div class="mui-input-row">
+                <label>备注</label>
+                <textarea id="remark" name="remark" rows="3" cols="20"></textarea>
+            </div>
+        </div>
+      
+        <div class="footer-fixed">
+            <div class="total-pay">
+                <button type="submit" class="mui-btn red fr" id="submitOrder">提交订单</button>
+            </div>
+            <div class="total-price">合计：<span class="red">￥</span><span class="red">{$booksPrice|number_format=###,2,'.',''}</span></div>
+        </div>
+    </form>
+</div>
+
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+	/*$(document).ready(function() {
+		isDefault = "{$defaultAddr['is_default']}";	
+		if(isDefault=="1") {
+			htmlStr = "<label>默认地址</label><input type='radio' checked>";
+			$('#isDefaultAddr').html(htmlStr);
+		} else if(isDefault=="") {
+			htmlStr = "<div class='mui-text-center'><button class='mui-btn red' id='manageAddress' onclick='manageAddr()'>管理收货地址</button></div>"
+			$('#ifnoAddr').html(htmlStr);
+		}
+	});*/
+	
+	function manageAddr() {
+		var url = "{:leuu('Member/manageAddress')}";
+		document.location.href = url;
+	};
+	
+   /**
+	* 切换地址
+	*/
+	$('#selectAddr').click(function() {
+		var url = "{:leuu('Member/selectAddress')}";
+		document.location.href = url;
+	});
+	
+	
+	/**
+	 * 表单提交前的操作
+	 */
+	var form_confirm = false;
+    $('#submitOrder').click(function() {
+	    var addr_id = "{$defaultAddr['addr_id']}";
+        if((addr_id != "") && (typeof($('.goods-id').val()) != 'undefined')){		//判断是否有地址和商品信息
+            var result = confirm("确认付款？");
+            if(result) {
+                $("input[name=status]").val(2);
+            }else {
+                $("input[name=status]").val(1);
+            }
+            form_confirm = true;
+        }else {
+            mui.toast("请先完善地址等信息");
+            form_confirm = false;               //阻止表单提交
+        }
+    });
+	
+	/*$('#submitOrder').click(function() {
+		var addr_ID = "{$defaultAddr['addr_id']}";
+		if(addr_ID!=""){
+			var result = confirm("确认付款？");
+			var payStatus = 0;
+			var remark = "";
+			if(result) {
+				payStatus = 2;
+			}else {
+				payStatus = 1;
+			}
+			
+			//付款方式
+			var payChannel = $('#paymentSel').val();
+			//发票和备注
+			var needInvoice = $("input[name=invoice]")[0].checked;
+			if(needInvoice) {
+				remark = "[*需要发票]"+$('#remark').val();
+			} else {
+				remark = $('#remark').val();
+			}
+			//书籍信息
+			var books = [];
+			$('li.booksInformation').each(function(i) {
+				var goods_id =  $("input[name=goodsID]").eq(i).val();
+				var goods_num = $("span.goodsNUM").eq(i).html();
+				var goods_price = $("span.now_price").eq(i).html();
+				books[i] = goods_id+"-"+goods_num+"-"+goods_price;
+			});
+			//books = books+"";    //数组转字符串
+			$.ajax({
+				type: "post",
+				url: "{:U('Shopping/submitOrder')}",
+				data: {products:books,productsPrice:"{$booksPrice}",myStatus:payStatus,
+					   addrID:addr_ID,myRemark:remark,myChannel:payChannel},
+				dataType: "json",
+				success: function(str) {
+					switch(str.result) {
+					case 1: {
+						var url = "{:leuu('Shopping/orderDetail')}&orderID="+str.order_id;
+						document.location.href = url;
+					} break;
+					case -1: {
+						alert("操作失败");
+					} break;
+					default:break;
+					}
+				}
+			});
+		}else {
+			mui.toast("请先添加收货地址");
+		}
+	});*/
+</script>
+</body>
+</html>

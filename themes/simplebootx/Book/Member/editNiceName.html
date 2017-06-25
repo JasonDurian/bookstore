@@ -1,0 +1,151 @@
+<tc_include file="Public:bookhead" />
+</head>
+<body class="bgw">
+    <div id="spinBody"></div>
+    <div id="previewSpin"></div>
+    
+    <header class="mui-text-center">
+        <h2>修改昵称</h2>
+    </header>
+    <div class="mui-content bgw">
+        <form action="{:leuu('Member/saveNicename')}" method="post" class="mui-input-group js-ajax-forms" autocomplete="on">
+            <div class="mui-input-row">
+                <label>我的昵称</label>
+                <input type="text" name="nick_name" placeholder="请输入要修改的昵称" autofocus/>
+            </div>
+            <div class="mui-input-row">
+                <label></label>
+                <span>昵称格式由1~16位的中文、字母、下划线组成</span>
+            </div>
+            <div class="mui-button-row">
+                <button id="saveNicename" type="submit" class="mui-btn red">确认并保存</button>
+            </div>
+        </form>
+    </div>
+
+    <tc_include file="Public:bookfooter" />
+    <script>
+        //全局变量
+        var GV = {
+            ROOT: "__ROOT__/",
+            WEB_ROOT: "__WEB_ROOT__/",
+            JS_ROOT: "public/js/"
+        };
+    </script>
+    <tc_include file="Public:bookscripts" />
+    <script src="__PUBLIC__/js/wind.js"></script>
+    <script src="__TMPL__Public/assets/js/swiperSlide/spin.min.js"></script>
+    <script src="__TMPL__Public/assets/js/swiperSlide/jquery.spin.js"></script>
+    <script>
+        $(function() {
+            /////---------------------
+            Wind.use('validate', 'ajaxForm', 'noty', function() {
+
+                var form = $('form.js-ajax-forms');
+                //ie处理placeholder提交问题
+                if($.browser && $.browser.msie) {
+                    form.find('[placeholder]').each(function() {
+                        var input = $(this);
+                        if(input.val() == input.attr('placeholder')) {
+                            input.val('');
+                        }
+                    });
+                }
+
+                var formloading = false;
+                //表单验证开始
+                form.validate({
+                    //失去焦点时验证（不包括复选框/单选按钮）
+                    onfocusout: false,
+                    //是否在敲击键盘时验证
+                    onkeyup: false,
+                    //在点击复选框和单选按钮时验证
+                    onclick: false,
+                    //给未通过验证的元素加效果,闪烁等
+                    highlight: false,
+                    showErrors: function(errorMap, errorArr) {
+                        //errorMap {'name':'错误信息'}
+                        //errorArr [{'message':'错误信息',element:({})}]
+                        try {
+                            $(errorArr[0].element).focus();
+                            noty({text: errorArr[0].message,
+                                type:'error',
+                                layout:'center',
+                            });
+                        } catch(err) {}
+                    },
+                    //验证规则
+                    rules: {
+                        'nick_name': {
+                            required: 1,
+                            rangelength:[1,16]
+                        },
+                    },
+                    //验证未通过提示消息
+                    messages: {
+                        'nick_name': {
+                            required: '请输入昵称',
+                            rangelength: '最多16个字符'
+                        },
+                    },
+                    //验证通过，提交表单
+                    submitHandler: function(forms) {
+                        if(formloading)
+                            return;
+                        $(forms).ajaxSubmit({
+                            url: form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+                            dataType: 'json',
+                            beforeSubmit: function(arr, $form, options) {
+                                formloading = true;
+                                $('#previewSpin').spin({color: '#fff'});
+                                $("#spinBody").addClass('spin-body');
+                            },
+                            success: function(data, statusText, xhr, $form) {
+                                formloading = false;
+                                if(data.status) {
+                                    document.location.href = "{:leuu('Member/editMember')}";
+                                } else {
+                                    $('#previewSpin').spin(false);
+                                    $("#spinBody").removeClass('spin-body');
+                                    
+                                    noty({text: data.info,
+                                        type:'error',
+                                        layout:'center',
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+            ////-------------------------
+        });
+
+        /*$('#saveNicename').click(function() {
+        	var oUrl = "{:leuu('Member/saveNicename')}";
+        	var oNicename = $('input[name=user_nicename]').val();
+        	
+        	$.ajax({
+        		type: "post",
+        		url: oUrl,
+        		data: {user_nicename:oNicename},
+        		dataType: "json",
+        		success: function(str) {
+        			switch(str.result) {
+        			case 1: {
+        				mui.toast("保存成功");
+        				document.location.href = "{:leuu('Member/editMember')}";
+        				//window.history.go(-1);
+        			} break;
+        			case -1: {
+        				mui.toast("操作失败");
+        			} break;
+        			default:break;
+        			}
+        		}
+        	});
+        });*/
+    </script>
+</body>
+
+</html>

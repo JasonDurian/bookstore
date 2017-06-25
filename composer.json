@@ -1,0 +1,11 @@
+{
+  "name" : "store",
+  "version" : "0.1.0",
+  "require": {
+        "php": ">=5.3.0"
+    },
+  "repositories" : [ {
+    "type" : "composer",
+    "url" : "https://packagist.org/"
+  } ]
+}

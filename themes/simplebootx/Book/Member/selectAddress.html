@@ -1,0 +1,40 @@
+<tc_include file="Public:bookhead" />
+<style>
+#addButton {padding-top:20px;}
+#addAddress {width:25%; min-width:100px;}
+</style>
+</head>
+<body class="bgw">
+<header class="mui-text-center">
+   <h2>选择收货地址</h2>
+</header>
+<div class="mui-content bgw">
+   <ul class="mui-table-view lists">
+      <foreach name='address' item='vo'>
+        <li class="mui-table-view-cell selectAddr">
+        	<span class="fl">{$vo['contact']}</span><span class="fr">{$vo['mobile']}</span><br />
+        	<span>{$vo['province']}{$vo['city']}{$vo['district']}{$vo['address']}</span>
+        	<input type="hidden" name="addrURL" value="{:leuu('Shopping/bookpay',array('addrID'=>$vo['addr_id']))}" />
+   	    </li>
+   	  </foreach>
+   </ul>
+  
+	<div id="addButton" class="mui-text-center">
+     <button class="mui-btn red" id="manageAddress">管理收货地址</button>
+   </div>
+</div>
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+    $('li.selectAddr').click(function() {
+        var addrURL = $(this).children('input[name=addrURL]').val();
+        document.location.href=addrURL;
+    });
+    
+    $("#manageAddress").click(function() {
+        var url = "{:leuu('Member/manageAddress')}";
+        document.location.href = url;
+    });
+</script>
+</body>
+</html>

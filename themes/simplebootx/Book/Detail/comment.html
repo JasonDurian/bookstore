@@ -1,0 +1,168 @@
+<tc_include file="Public:bookhead" />
+<style>
+.nick-name {
+    display: block;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+</style>
+</head>
+<body>
+	<div class="mui-content">
+		<ul class="mui-table-view book-view">
+			<li class="mui-table-view-cell"><img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($book['cover'])}">
+
+				<div class="mui-media-body">
+					<h4>{$book['name']}</h4>
+					<div class="fl">评分：</div><div class="star fl" data-score="{$score}"></div> <br />
+					<p class="price">
+					<span>价格：</span><span class="red">￥{$book['now_price']}</span>
+						<span class="delete">￥{$book['pre_price']}</span>&nbsp;&nbsp;[<span>
+						<php>$discount=round(($book['now_price']/$book['pre_price']*10),1);echo $discount;</php>
+						</span>折]<br />
+					</p>
+					<p>
+						<span>库存：</span><span>{$book['inventory']}</span>件
+						&nbsp;&nbsp;&nbsp;
+						<button class="mui-btn btn-nob" id="freight_rule" onclick="">包邮（不包含偏远地区）</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</p>
+				</div>
+				<p>
+					<button class="mui-btn red w40 fr" id="shopping">加入购物车</button>
+					<button class="mui-btn shoucang   fr" id="addFavorite">
+						<img id="fav_" src="{:sp_get_asset_upload_path('img/icon-heart.png')}"><br />收藏
+					</button>
+					<!--加入购物车借阅车弹出层提示[-->
+					<div id="info"></div>
+					<!--]加入购物车借阅车弹出层提示-->
+				</p>
+			</li>
+		</ul>
+		<div class="book-nav">
+			<a href="{:leuu('Detail/index',array('id'=>$book['goods_id']))}">商品介绍</a>
+			<a class="on" href="{:leuu('Detail/comment',array('id'=>$book['goods_id']))}">评论(<span>{$commCount}</span>)</a>
+		</div>
+		<div class="book-detail">
+			<div class="con">
+				<ul class="mui-table-view">
+					<foreach name="comments" item="vo">
+					<li class="mui-table-view-cell">
+						<div class="user-avatar fl">
+							<img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['avatar'])}">
+						</div>
+						<div class="mui-media-body fl">
+					    	<span class="nick-name">{$vo['nick_name']}</span>
+					    	<h6>&nbsp;&nbsp;{$vo['create_time']|date='Y-m-d H:i', ###}</h6>
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+					    <p>
+					    	<empty name="vo['content']">
+					    	还没想好评论...
+				    		<else/>{$vo['content']}
+				    		</empty>
+				    	</p>
+					</li>
+					</foreach>
+				</ul>
+			</div>			
+		</div>
+	</div>
+
+	<tc_include file="Public:bookfooter" />
+	<tc_include file="Public:bookscripts" />
+	<script src="__TMPL__Public/assets/js/swiperSlide/jquery.raty.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			myfav = "{$myFav}";
+			if(myfav!="0") {
+				$("#fav_").attr('src', "{:sp_get_asset_upload_path('img/icon-heart-red.png')}");
+				$("#addFavorite").addClass('select');
+			}	
+		});
+		
+		$(function() {
+		    $.fn.raty.defaults.path = '__TMPL__Public/assets/images/swiperSlide';
+			$('.star').raty({
+			    score: function() {
+			    	return $(this).attr('data-score');
+			  	},
+			  	readOnly: true
+			});
+		});
+		
+		$(function() {
+			$(".con img").attr('width', '100%');
+		});
+
+		$(".mui-btn").click(function() {
+			var key = $(this).attr('id');
+
+			if(key == 'addFavorite') {
+				var ico = 0;
+				if($("#fav_").attr('src') == "{:sp_get_asset_upload_path('img/icon-heart.png')}") {
+					var iconRed = "{:sp_get_asset_upload_path('img/icon-heart-red.png')}";
+					ico = 1;
+					$("#addFavorite").addClass('select');
+				} else {
+					var iconRed = "{:sp_get_asset_upload_path('img/icon-heart.png')}";
+					$("#addFavorite").removeClass("select");
+				}
+
+				$.ajax({
+					type: "post",
+					url: "{:leuu('Shopping/addFavorite')}",
+					data: {product_id:"{$book['goods_id']}",fav:ico},
+					dataType: "json",
+					success: function(str) {
+						if(str.code == '-1') {
+							mui.toast(str.message);
+						}else if(str.code == '-2'){
+							mui.toast(str.message);
+						}else {
+							$("#fav_").attr('src', iconRed);
+						}
+					}
+				})
+			} else if(key == 'shopping') {
+				$.ajax({
+					type: "post",
+					url: "{:leuu('Shopping/addshopping')}",
+					data: {product_id:"{$book['goods_id']}"},
+					dataType: "json",
+					success: function(str) {
+						sAlert(str);
+					}
+				})
+			} else if(key == 'borrow') {
+				$.ajax({
+					type: "post",
+					url: 'http://weishang.citicbooks.com/mzs/borrow/addBorrowCart',
+					data: "product_id=2987&code=9787508653969&price=74.25&num=1",
+					dataType: "json",
+					success: function(str) {
+						sAlert(str);
+					}
+				})
+
+			}
+		})
+
+		function sAlert(str) {
+			if(str.code == '-2') {
+				mui.toast(str.message);
+			} else if(str.code == '-1') {
+				mui.toast(str.message);
+			} else {
+				$(".pro_count").addClass('number');
+				$(".pro_count").html('+1');
+				setTimeout(function() {
+					$(".pro_count").html("");
+					$(".pro_count").removeClass("number");
+				}, 2000);
+			}
+
+		}
+	</script>
+</body>
+</html>

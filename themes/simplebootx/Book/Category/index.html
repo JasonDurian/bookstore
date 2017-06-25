@@ -1,0 +1,18 @@
+<tc_include file="Public:bookhead" />
+</head>
+<body>
+	<tc_include file="Public:booknav" />
+
+	<div class="mui-content mt20">
+		<div class="form-tit grey">分类</div>
+		<ul class="category">
+		<foreach name='types' item='vo'>
+			<li><a href="{:leuu('Category/category',array('tid'=>$vo['type_id']))}">{$vo['name']}</a></li>
+		</foreach>
+		</ul>
+	</div>
+	
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+</body>
+</html>

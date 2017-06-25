@@ -1,0 +1,91 @@
+<tc_include file="Public:bookhead" />
+</head>
+<body>
+	<tc_include file="Public:booknav" />
+	
+	<div class="mui-content">
+			<div class="form-tit grey">搜索结果</div>
+			<div class="inner">
+				<ul class="mui-table-view lists">{$remind}
+					<foreach name='books' item='vo'>
+			               <li class="mui-table-view-cell mui-media">
+			                   <a href="{:leuu('Detail/index',array('id'=>$vo['goods_id']))}">
+			                       <img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+			                       <div class="mui-media-body">
+										{$vo['name']}
+										<p class="price">
+											价格：<span class="delete">{$vo['pre_price']}</span> <span class="red">{$vo['now_price']}</span>
+											[<span>
+											<php>$discount=round(($vo['now_price']/$vo['pre_price']*10),1);echo $discount;</php>
+											</span>折]
+										</p>
+									</div>
+			                   </a>
+			               </li>
+			          </foreach>
+         		</ul>
+				<div class="mui-text-center mt20" id="remind"></div>
+			</div>
+		</div>
+
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script>
+ 	var moredata=1;
+    var page_num=1;
+    var ajax_url="{:leuu('Index/getLimit')}";
+    $(window).scroll(function(){
+        var total_height = document.body.scrollHeight;
+        var scrollTop = document.body.scrollTop;
+        var window_height = window.innerHeight;
+        if(total_height == (scrollTop +window_height) && moredata==1){
+            page_num++;
+            $.post(ajax_url,{page:page_num,keyword:'{$keyword}'},
+            function(data){
+                if(data.result!=''){
+                    $("#remind").html('正在努力加载…');
+                    $("#remind").show();
+                    var htmllist=eval(data.result);
+                    var htmlstr='';
+                    $.each(htmllist,function(k,v){
+                        var title = v.name;
+                        var zk = (v.now_price / v.pre_price * 10).toFixed(1);
+                        var cover = (v.cover.indexOf('http') === 0) || (v.cover.indexOf('/') === 0) ? v.cover : ('{:sp_get_asset_upload_path()}' + v.cover);
+                        
+                        htmlstr+='<li class="mui-table-view-cell mui-media">'+
+                        	'<a href="{:leuu('Detail/index')}&id='+v.goods_id+'">'+
+                            '<img class="mui-media-object mui-pull-left" src="'+cover+'">'+
+                            '<div class="mui-media-body">'+title+
+                            '<p class="price">价格：<span class="delete">￥'+ v.pre_price+'</span> <span class="red">￥'+v.now_price+'</span> ['+zk+'折]</p>'+
+                            '</div></a></li>';
+                    });
+                    // 为了测试，延迟1秒加载
+                      setTimeout(function(){
+                        $(".lists").append(htmlstr);
+                      },1000);
+
+                } else {
+                    $("#remind").html('数据已经全部加载了哦！ ^_^');
+                    $("#remind").show();
+                    moredata=0;
+                    return;
+                }
+            });
+        }
+    });
+
+	//分隔字符串
+	function splitString(delimiter, string) {
+
+		if (string == '') {
+			return "{:sp_get_asset_upload_path('img/book.jpg')}";
+		} else {
+			var words = string.split(delimiter);
+
+			return words[0];
+		}
+
+	}
+</script>
+</body>
+</html>

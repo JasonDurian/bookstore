@@ -1,0 +1,235 @@
+<tc_include file="Public:bookhead" />
+<style>
+    #myPay {width: 100%;}
+    #bookname {width: 500px;}
+    #quantity {font-size: 15px; color:#808080;}
+    #cartTable {margin-bottom:54px;}
+</style>
+</head>
+<body class="bgw">
+    <div id="spinBody"></div>
+    <div id="previewSpin"></div>
+    
+    <form action="{:leuu('Shopping/bookpay')}" method="post" onsubmit="return checksubmit()">
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper bgw">
+        <div class="mui-scroll">
+            <header class="mui-text-center">
+                <p class="oper_header">购物车</p>
+            </header>
+            <ul id="cartTable" class="mui-table-view book-view">
+                <li class="mui-table-view-cell">
+                    <div class="mui-checkbox mui-left">
+                        <label for="all-check"><p>全选</p></label>
+                        <input type="checkbox" id="all-check" onclick="selectAll()" />
+                    </div>
+                </li>
+                <foreach name='books' item='vo'>
+                	<li class="mui-table-view-cell">
+               			<div class="mui-slider-right mui-disabled">
+		                    <input class="goods_id" type="hidden" value="{$vo['goods_id']}" />
+		                    <a class="mui-btn mui-btn-red">删除</a>
+		                </div>
+			            <div class="mui-slider-handle">
+                	    	<div class="mui-row">
+	                	    	<div class="mui-checkbox mui-left mui-col-xs-1">
+	                                <label>&nbsp;</label>
+	                                <if condition="$vo['status'] eq 1">
+	                                	<input type="checkbox" class="check-box" name="goods_ids[]" value="{$vo['goods_id']}" />
+	                                </if>
+	                            </div>
+                            <div class="mui-media-body mui-col-xs-11">
+                                <a href="{:leuu('Detail/index',array('id'=>$vo['goods_id']))}">
+                                    <img class="mui-media-object mui-pull-left" src="{:sp_get_asset_upload_path($vo['cover'])}">
+                                    <p id="bookname">{$vo['name']}</p>
+                                    <p class="price">价格：
+                                    <br /><span class="red">￥</span><span class="now_price red">{$vo['now_price']}</span><span class="delete">&nbsp;￥{$vo['pre_price']}</span>&nbsp;&nbsp;
+                                    [<span>
+                                    <php>$discount=round(($vo['now_price']/$vo['pre_price']*10),1);echo $discount;</php>
+                                    </span>折]
+                                    <br />  
+                                    </p>
+                                </a>
+                                <if condition="$vo['status'] eq 0">
+                                	<div>
+	                            		<p>库存不足，正在补货...</p>
+	                            	</div>
+	                            <else/>
+	                            	<div id="quantity">数量：
+	                                    <div class="mui-numbox" data-numbox-min='1'>
+	                                      <button class="mui-btn mui-numbox-btn-minus" type="button" id="myMinus">-</button>
+	                                      <input class="mui-numbox-input goods_num" type="number" value="{$vo['num']}"/>
+	                                      <button class="mui-btn mui-numbox-btn-plus" type="button" id="myPlus">+</button>
+	                                    </div>
+	                                </div>
+                                </if>
+                            </div>
+	                            <!-- div class="mui-col-xs-1">
+	                            	<input type="hidden" class="goods_id" value="{$vo['goods_id']}" />
+	                                <button class="mui-btn cart-delete" type="button">
+	                                    <span class="mui-icon mui-icon-trash fr red"></span>
+	                                </button>
+	                            </div -->
+                            </div>
+                	    </div>
+                	</li>
+                </foreach>
+            </ul>	
+        </div>
+        <div class="footer-fixed">
+          	<div class="total-pay">
+        		<button type="submit" class="mui-btn red fr" id="myPay">去结算</button>
+        	</div>
+        	<div class="total-price">合计：<span class="red">￥</span><span id="total" class="red">0.00</span></div>
+        </div>
+    </div>
+    </form>
+
+<tc_include file="Public:bookfooter" />
+<tc_include file="Public:bookscripts" />
+<script src="__TMPL__Public/assets/js/swiperSlide/spin.min.js"></script>
+<script src="__TMPL__Public/assets/js/swiperSlide/jquery.spin.js"></script>
+<script>
+    
+	/**
+	* 从确认订单页面返回时，需要重新计算合计
+	*/
+	window.onload = calculate();
+	
+   /**
+	* 复选框被选中时
+	*/
+	$('.check-box').change(function() {
+		calculate();
+	});
+	
+   /**
+	* 数字框内输入改变时
+	*/
+	$('.goods_num').change(function() {
+	    var i = $(this).index('.goods_num');           //当前数字框索引值
+		var goods_id = $('.goods_id').eq(i).val();
+		var goods_num = $(this);
+		$.ajax({
+			type: "post",
+			url: "{:leuu('Shopping/operation')}",
+			data: {product_id:goods_id,product_num:goods_num.val()},
+			beforeSend: function() {
+                $('#previewSpin').spin({color: '#fff'});
+                $("#spinBody").addClass('spin-body');
+            },
+			dataType: "json",
+			success: function(str) {
+			    $('#previewSpin').spin(false);
+                $("#spinBody").removeClass('spin-body');
+                
+				switch(str.result) {
+				case 1: {
+					calculate();
+				} break;
+				case -1: {
+					goods_num.val(str.book_num);
+					mui.toast("操作失败");
+				} break;
+				case -2: {
+					goods_num.val(str.book_num);
+					calculate();
+					mui.toast("超出库存");
+				} break;
+				default:break;
+				}
+			}
+		});
+	});
+
+	/**
+	 * 删除商品
+	 */
+	$('.mui-btn-red').on('tap', function(event) {
+        //用到mui的内置方法，似乎只能用原生js代码
+        var li = this.parentNode.parentNode;
+        var myLocation = $(this);
+        var goods_id = $(this).parent().children('.goods_id').val();
+        mui.confirm('确认删除？', '叮当书店', function(e) {
+            if (e.index == 0) {
+                setTimeout(function() {
+                    mui.swipeoutClose(li);        //mui内置方法
+                }, 0);
+            }else {
+            	$.ajax({
+                    type: "post",
+                    url: "{:leuu('Shopping/deleteShopping')}",
+                    data: {product_id:goods_id},
+                    dataType: "json",
+                    success: function(str) {
+                        switch(str.result) {
+                        case 1: {
+                            myLocation.parents('li').remove(); 
+                            calculate();
+                        } break;
+                        case 2: {
+                            mui.toast("不存在此书");
+                            window.location.reload();
+                        } break;
+                        case 3: {
+                            mui.toast("查无此书");
+                        } break;
+                        default:break;
+                        }   
+                    }
+                });
+            }
+        });
+    });
+			
+   /**
+	* 检查表单提交是否为空
+	*/
+	function checksubmit()
+	{
+	    if($('.check-box:checked').length) {
+	        return true;
+	    }else {
+	        mui.toast("您还未选择商品");
+            return false;
+	    }
+	}
+	
+   /**
+	* 全选按钮
+	*/
+	function selectAll(){
+		var inputCheck = $('.check-box');						//选出来的是数组
+		var is_checked = $('#all-check')[0].checked;    
+		if(is_checked){
+			inputCheck.each(function(i) {
+				inputCheck[i].checked = true;
+			});
+		} else {
+			inputCheck.each(function(j) {
+				inputCheck[j].checked = false;
+			});
+		}
+		calculate();
+	}
+	
+	/**
+	* 合计
+	*/
+	function calculate() {
+		var inputCheck = $('.check-box');
+		var totalPrice = 0;
+		inputCheck.each(function(i) {
+			var is_checked = inputCheck[i].checked;
+			if(is_checked) {
+				var goods_num = $('.goods_num').eq(i).val();
+				var goods_price = $("span.now_price").eq(i).html();
+				totalPrice += (goods_num * goods_price);
+			}
+		});
+		totalPrice = totalPrice.toFixed(2);
+		$("span#total").html(totalPrice);
+	}
+	
+</script>
+</body>
+</html>
