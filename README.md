@@ -1,6 +1,10 @@
 Bookstore
 ===============
 
+演示地址 <http://www.ddbookstore.com>
+
+完整演示 （关注微信公众号“叮当书舍”）
+
 ## Now Begin
 
 First:
